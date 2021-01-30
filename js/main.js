@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const getNumber = function (lowerLimit, upperLimit) {
   if (lowerLimit < 0 || upperLimit < 0) {
