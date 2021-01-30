@@ -24,6 +24,10 @@ const validateStringLength = function (stringToCheck, maxLength = COMMENT_MAX_LE
     return new Error('Первый аргумент функции должен иметь тип "string"');
   }
 
+  if (maxLength < 0) {
+    return new Error('Значение длины комментария должно быть положительным числом, включая ноль');
+  }
+
   return (stringToCheck.length <= maxLength) ? true : false;
 }
 
