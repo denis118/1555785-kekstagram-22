@@ -34,61 +34,167 @@ const validateStringLength = function (stringToCheck, maxLength = COMMENT_MAX_LE
 validateStringLength('', 0);
 
 const PHOTO_DESCRIPTION_QUANTITY = 25;
-const descriptionStorage = [];
 
-let currentPhotoId = 0;
-const setPhotoId = function () {
-  if (localStorage.getItem('currentPhotoId')) {
-    currentPhotoId = Number(localStorage.getItem('currentPhotoId'));
-    currentPhotoId += 1;
-    localStorage.setItem('currentPhotoId', currentPhotoId);
-    return currentPhotoId;
-  }
-
-  currentPhotoId += 1;
-  localStorage.setItem('currentPhotoId', currentPhotoId);
-  return currentPhotoId;
-};
-
-const explanatoryText = [
-  'Отличное лето',
-  'Хорошая зима',
-  'Плохая погода',
-  'Успешная рыбалка',
-  'Неудачный сёрфинг',
-  'Урожайный год',
-  'Новый член семьи',
-  'Встреча одноклассников',
-  'Осень пришла',
-  'Поход за грибами',
-  'Поломались на трассе',
-  'Отдых нужен всем',
-  'Марафон',
-  'Повесили кормушку для птиц',
-  'В гостях у родителей',
-  'Семь раз отмерь, один раз отрежь',
-  'Байкал',
-  'Заброшенная деревня',
-  'Наша степь',
-  'Экспериментальный пирог',
-  'Первые подстнежники',
-  'Отмечаем Хэллоуин',
-  'Последствия Хэллоуина',
-  'Исследуем окрестности',
-  'Дача',
+const ADJECTIVES = [
+  'Красивый',
+  'Хороший',
+  'Добрый',
+  'Умный',
+  'Большой',
+  'Знатный',
+  'Смутный',
+  'Всеобщий',
+  'Грандиозный',
+  'Ударный',
+  'Локальный',
+  'Крохотный',
+  'Повседневный',
+  'Многолетний',
+  'Дорогой',
+  'Новый',
+  'Чёткий',
+  'Звёздный',
+  'Подозрительный',
+  'Коренной',
+  'Потенциальный',
+  'Значительный',
+  'Прогрессивный',
+  'Крупный',
+  'Могучий',
 ];
 
-const describePhoto = function () {
-  for (let i = 0; i < PHOTO_DESCRIPTION_QUANTITY; i++) {
-    let descriptionObject = {};
-    descriptionObject.id = setPhotoId();
-    descriptionObject.url = 'photos/' + descriptionObject.id + '.jpg';
-    descriptionObject.description = explanatoryText[i];
-    descriptionObject.likes = getNumber(15, 200);
-    descriptionStorage.push(descriptionObject);
+const NOUNS = [
+  'объект',
+  'посёлок',
+  'дом',
+  'дуб',
+  'тир',
+  'склон',
+  'пруд',
+  'столб',
+  'луч',
+  'мяч',
+  'овраг',
+  'путь',
+  'луг',
+  'смог',
+  'склон',
+  'сруб',
+  'огород',
+  'народ',
+  'набор',
+  'прибор',
+  'забор',
+  'ангар',
+  'товар',
+  'ручей',
+  'ключ',
+];
+
+const NAMES = [
+  'Аарон',
+  'Азиз',
+  'Блез',
+  'Гамлет',
+  'Гордей',
+  'Давлат',
+  'Евсей',
+  'Жерар',
+  'Заур',
+  'Илья',
+  'Карл',
+  'Клим',
+  'Лукьян',
+  'Макар',
+  'Никита',
+  'Олег',
+  'Педро',
+  'Ратибор',
+  'Савелий',
+  'Тимур',
+  'Устин',
+  'Хаким',
+  'Эльдар',
+  'Юрий',
+  'Ян',
+];
+
+const SURNAMES = [
+  'Смирнов',
+  'Иванов',
+  'Кузнецов',
+  'Соколов',
+  'Попов',
+  'Лебедев',
+  'Козлов',
+  'Новиков',
+  'Морозов',
+  'Петров',
+  'Волков',
+  'Соловьёв',
+  'Васильев',
+  'Зайцев',
+  'Павлов',
+  'Семёнов',
+  'Голубев',
+  'Виноградов',
+  'Богданов',
+  'Воробьёв',
+  'Фёдоров',
+  'Михайлов',
+  'Беляев',
+  'Тарасов',
+  'Белов',
+];
+
+const MESSAGE_ROW_MATERIALS = [
+  'Всё отлично!',
+  'В целом всё неплохо. Но не всё.',
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
+];
+
+const setId = function (key) {
+  if (!localStorage.getItem(key)) {
+    localStorage.setItem(key, 0);
   }
+
+  let id = Number(localStorage.getItem(key));
+  id += 1;
+  localStorage.setItem(key, id);
+  return id;
 };
 
-describePhoto();
+const mixWords = function (firstMember, secondMember) {
+  return firstMember[getNumber(0, 24)] + ' ' + secondMember[getNumber(0, 24)];
+};
 
-localStorage.removeItem('currentPhotoId');
+const generateComment = function () {
+  return {
+    id: setId('comment'),
+    avatar: `img/avatar-${getNumber(1, 6)}.svg`,
+    message: MESSAGE_ROW_MATERIALS[getNumber(0, 5)],
+    name: mixWords(NAMES, SURNAMES),
+  };
+};
+
+const describePhoto = function () {
+  return {
+    id: setId('description'),
+    url: `photos/${localStorage.getItem('description')}.jpg`,
+    description: mixWords(ADJECTIVES, NOUNS),
+    likes: getNumber(15, 200),
+    comment: generateComment(),
+  };
+};
+
+// не присваивал массив переменной из-за ESLint
+new Array(PHOTO_DESCRIPTION_QUANTITY)
+  .fill(null)
+  .map(() => describePhoto());
+
+// добавил эти строки временно, чтобы при обновлении страницы id начиналось с 1
+localStorage.removeItem('description');
+localStorage.removeItem('comment');
