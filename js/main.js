@@ -171,11 +171,30 @@ const mixWords = function (firstMember, secondMember) {
   return firstMember[getNumber(0, 24)] + ' ' + secondMember[getNumber(0, 24)];
 };
 
+const chooseSentence = function (array) {
+  const invalidIndexes = [];
+  let randomIndex = getNumber(0, array.length - 1);
+
+  while (!validateStringLength(array[randomIndex])) {
+    if (invalidIndexes.length >= array.length) {
+      return;
+    }
+
+    if (!invalidIndexes.some((item) => item === randomIndex)) {
+      invalidIndexes.push(randomIndex);
+    }
+
+    randomIndex = getNumber(0, array.length - 1);
+  }
+
+  return array[randomIndex];
+};
+
 const generateComment = function () {
   return {
     id: setId('comment'),
     avatar: `img/avatar-${getNumber(1, 6)}.svg`,
-    message: MESSAGE_ROW_MATERIALS[getNumber(0, 5)],
+    message: chooseSentence(MESSAGE_ROW_MATERIALS),
     name: mixWords(NAMES, SURNAMES),
   };
 };
