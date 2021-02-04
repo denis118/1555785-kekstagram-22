@@ -172,22 +172,15 @@ const mixWords = function (firstMember, secondMember) {
 };
 
 const chooseSentence = function (array) {
-  const invalidIndexes = [];
-  let randomIndex = getNumber(0, array.length - 1);
+  const validSentences = [];
 
-  while (!validateStringLength(array[randomIndex])) {
-    if (invalidIndexes.length >= array.length) {
-      return;
+  for (let i = 0; i < array.length - 1; i++) {
+    if (validateStringLength(array[i])) {
+      validSentences.push((array.slice(i, i + 1))[0]);
     }
-
-    if (!invalidIndexes.some((item) => item === randomIndex)) {
-      invalidIndexes.push(randomIndex);
-    }
-
-    randomIndex = getNumber(0, array.length - 1);
   }
 
-  return array[randomIndex];
+  return validSentences[getNumber(0, validSentences.length - 1)];
 };
 
 const generateComment = function () {
