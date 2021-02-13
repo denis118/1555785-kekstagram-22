@@ -46,7 +46,7 @@ const mixWords = function (firstMember, secondMember) {
 const chooseSentence = function (array) {
   const validSentences = [];
 
-  for (let i = 0; i < array.length - 1; i++) {
+  for (let i = 0; i < array.length; i++) {
     if (validateStringLength(array[i])) {
       validSentences.push((array.slice(i, i + 1))[0]);
     }
