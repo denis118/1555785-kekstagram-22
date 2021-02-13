@@ -1,4 +1,4 @@
-import './image-viewer.js';
+import './thumbnails.js';
 
 localStorage.removeItem('description');
 localStorage.removeItem('comment');
