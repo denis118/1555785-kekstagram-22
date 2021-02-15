@@ -10,6 +10,7 @@ const AVATAR_START_NUMBER = 1;
 const AVATAR_END_NUMBER = 6;
 const MIN_LIKES_QUANTITY = 15;
 const MAX_LIKES_QUANTITY = 200;
+const MAX_COMMENTS_QUANTITY = 9;
 const ADJECTIVES = [
   'Красивый',
   'Хороший',
@@ -140,19 +141,23 @@ const generateComment = function () {
   };
 };
 
+const storeObjects = function (objectsAmount, generatingFunction) {
+  return new Array(objectsAmount)
+    .fill(null)
+    .map(() => generatingFunction());
+}
+
 const describePhoto = function () {
   return {
     id: setId('description'),
     url: `photos/${localStorage.getItem('description')}.jpg`,
     description: mixWords(ADJECTIVES, NOUNS),
     likes: getNumber(MIN_LIKES_QUANTITY, MAX_LIKES_QUANTITY),
-    comment: generateComment(),
+    comments: storeObjects(getNumber(0, MAX_COMMENTS_QUANTITY), generateComment),
   };
 };
 
-const photoDescription = new Array(PHOTO_DESCRIPTION_QUANTITY)
-  .fill(null)
-  .map(() => describePhoto());
+const photoDescription = storeObjects(PHOTO_DESCRIPTION_QUANTITY, describePhoto);
 
 export {
   photoDescription

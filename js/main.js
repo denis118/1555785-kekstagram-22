@@ -1,12 +1,4 @@
-// закомментировал из-за ESLint
-
-/*
-import {
-  photoDescription
-} from './photo-description.js'
-
-console.log(photoDescription);
+import './thumbnails.js';
 
 localStorage.removeItem('description');
 localStorage.removeItem('comment');
-*/
