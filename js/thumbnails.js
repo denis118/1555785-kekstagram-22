@@ -2,14 +2,19 @@ import {
   photoDescription
 } from './photo-description.js';
 
+import {
+  pictureOpenHandler,
+  onPictureEnterKeydown
+} from './image-viewer.js';
+
 const picturesBlock = document.querySelector('.pictures');
 const picture = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-const picturesFragment = document.createDocumentFragment();
-
 const collectPictures = () => {
+  const picturesFragment = document.createDocumentFragment();
+
   for (let i = 0; i < photoDescription.length; i++) {
     const newPicture = picture.cloneNode(true);
     const pictureImg = newPicture.querySelector('.picture__img');
@@ -22,11 +27,15 @@ const collectPictures = () => {
 
     picturesFragment.appendChild(newPicture);
   }
+
+  return picturesFragment;
 };
 
 const renderPictures = () => {
-  collectPictures();
-  picturesBlock.appendChild(picturesFragment);
+  picturesBlock.appendChild(collectPictures());
 };
 
 renderPictures();
+
+picturesBlock.addEventListener('click', pictureOpenHandler);
+picturesBlock.addEventListener('keydown', onPictureEnterKeydown);
