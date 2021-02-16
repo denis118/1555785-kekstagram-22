@@ -55,10 +55,25 @@ const chooseSentence = function (array) {
   return validSentences[getNumber(0, validSentences.length - 1)];
 };
 
+const isEscEvent = (evt) => {
+  return evt.key === ('Escape' || 'Esc');
+};
+
+const isEnterEvent = (evt) => {
+  return evt.key === 'Enter';
+};
+
+const extractPath = (string) => {
+  return new URL(string).pathname;
+};
+
 export {
   getNumber,
   validateStringLength,
   setId,
   mixWords,
-  chooseSentence
+  chooseSentence,
+  isEscEvent,
+  isEnterEvent,
+  extractPath
 };
