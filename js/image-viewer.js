@@ -106,16 +106,16 @@ viewImage.hideExtraComments = function () {
   return this;
 };
 
-const pictureCloseHandler = (evt) => {
+const onPictureClose = (evt) => {
   evt.preventDefault();
   viewImage.closeBigPicture();
-  viewImage.bigPictureCancel.removeEventListener('click', pictureCloseHandler);
+  viewImage.bigPictureCancel.removeEventListener('click', onPictureClose);
   document.removeEventListener('keydown', onPopupEscKeydown);
 };
 
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
-    pictureCloseHandler(evt);
+    onPictureClose(evt);
   }
 };
 
@@ -132,7 +132,7 @@ const onPictureClick = (evt) => {
     viewImage.socialComments.appendChild(viewImage.commentsFragment);
     viewImage.hideExtraComments()
 
-    viewImage.bigPictureCancel.addEventListener('click', pictureCloseHandler);
+    viewImage.bigPictureCancel.addEventListener('click', onPictureClose);
     document.addEventListener('keydown', onPopupEscKeydown);
   }
 };

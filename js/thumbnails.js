@@ -25,9 +25,6 @@ const collectPictures = () => {
     pictureComments.textContent = photoDescription[i].comments.length;
     pictureLikes.textContent = photoDescription[i].likes;
 
-    newPicture.addEventListener('click', onPictureClick);
-    newPicture.addEventListener('keydown', onPictureEnterKeydown);
-
     picturesFragment.appendChild(newPicture);
   }
 
@@ -39,3 +36,19 @@ const renderPictures = () => {
 };
 
 renderPictures();
+
+const onPicturesBlockMouseOver = (evt) => {
+  if (evt.target.matches('img[class="picture__img"]')) {
+    evt.target.addEventListener('click', onPictureClick);
+  }
+};
+
+const onPicturesBlockMouseOut = (evt) => {
+  if (evt.target.matches('img[class="picture__img"]')) {
+    evt.target.removeEventListener('click', onPictureClick);
+  }
+};
+
+picturesBlock.addEventListener('mouseover', onPicturesBlockMouseOver);
+picturesBlock.addEventListener('mouseout', onPicturesBlockMouseOut);
+picturesBlock.addEventListener('keydown', onPictureEnterKeydown);
