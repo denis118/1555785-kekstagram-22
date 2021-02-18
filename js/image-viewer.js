@@ -119,7 +119,7 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 
-const pictureOpenHandler = (evt) => {
+const onPictureClick = (evt) => {
   evt.preventDefault();
 
   if (evt.target.matches('img[class="picture__img"]') || evt.target.matches('a[class="picture"]')) {
@@ -140,11 +140,11 @@ const pictureOpenHandler = (evt) => {
 const onPictureEnterKeydown = (evt) => {
   if (isEnterEvent(evt)) {
     evt.preventDefault();
-    pictureOpenHandler(evt);
+    onPictureClick(evt);
   }
 };
 
 export {
-  pictureOpenHandler,
+  onPictureClick,
   onPictureEnterKeydown
 };

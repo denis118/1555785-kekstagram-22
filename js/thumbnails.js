@@ -3,7 +3,7 @@ import {
 } from './photo-description.js';
 
 import {
-  pictureOpenHandler,
+  onPictureClick,
   onPictureEnterKeydown
 } from './image-viewer.js';
 
@@ -25,6 +25,9 @@ const collectPictures = () => {
     pictureComments.textContent = photoDescription[i].comments.length;
     pictureLikes.textContent = photoDescription[i].likes;
 
+    newPicture.addEventListener('click', onPictureClick);
+    newPicture.addEventListener('keydown', onPictureEnterKeydown);
+
     picturesFragment.appendChild(newPicture);
   }
 
@@ -36,6 +39,3 @@ const renderPictures = () => {
 };
 
 renderPictures();
-
-picturesBlock.addEventListener('click', pictureOpenHandler);
-picturesBlock.addEventListener('keydown', onPictureEnterKeydown);
