@@ -49,6 +49,19 @@ const onPicturesBlockMouseOut = (evt) => {
   }
 };
 
+const onPicturesBlockFocus = (evt) => {
+  if (evt.target.matches('a[class="picture"]')) {
+    evt.target.addEventListener('keydown', onPictureEnterKeydown);
+  }
+};
+
+const onPicturesBlockBlur = (evt) => {
+  if (evt.target.matches('a[class="picture"]')) {
+    evt.target.removeEventListener('keydown', onPictureEnterKeydown);
+  }
+};
+
 picturesBlock.addEventListener('mouseover', onPicturesBlockMouseOver);
 picturesBlock.addEventListener('mouseout', onPicturesBlockMouseOut);
-picturesBlock.addEventListener('keydown', onPictureEnterKeydown);
+picturesBlock.addEventListener('focus', onPicturesBlockFocus, true);
+picturesBlock.addEventListener('blur', onPicturesBlockBlur, true);

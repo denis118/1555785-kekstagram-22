@@ -12,8 +12,8 @@ const onUploadFileChange = (evt) => {
   body.classList.add('modal-open');
   imgUploadOverlay.classList.remove('hidden');
 
-  uploadCancel.addEventListener('click', onUploadCancelClick, {once: true});
-  document.addEventListener('keydown', onUploadFileEscKeydown, {once: true});
+  uploadCancel.addEventListener('click', onUploadCancelClick);
+  document.addEventListener('keydown', onUploadFileEscKeydown);
 };
 
 const onUploadCancelClick = (evt) => {
@@ -21,6 +21,9 @@ const onUploadCancelClick = (evt) => {
   uploadFile.value = '';
   body.classList.remove('modal-open');
   imgUploadOverlay.classList.add('hidden');
+
+  uploadCancel.removeEventListener('click', onUploadCancelClick);
+  document.removeEventListener('keydown', onUploadFileEscKeydown);
 };
 
 const onUploadFileEscKeydown = (evt) => {
