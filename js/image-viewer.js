@@ -12,7 +12,7 @@ const AVATAR_WIDTH = 35;
 const AVATAR_HEIGHT = 35;
 const DISPLAYED_COMMENTS_AMOUNT = 5;
 
-const Elements = new function () { // словарь
+const Elements = new function () {
   this.body = document.body;
   this.bigPicture = document.querySelector('.big-picture');
   this.bigPictureImgBox = this.bigPicture.querySelector('.big-picture__img');
@@ -111,12 +111,14 @@ const onPictureClose = (evt) => {
   viewImage.closeBigPicture();
   viewImage.bigPictureCancel.removeEventListener('click', onPictureClose);
   document.removeEventListener('keydown', onPopupEscKeydown);
+  return undefined;
 };
 
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     onPictureClose(evt);
   }
+  return undefined;
 };
 
 const onPictureClick = (evt) => {
@@ -135,6 +137,7 @@ const onPictureClick = (evt) => {
     viewImage.bigPictureCancel.addEventListener('click', onPictureClose);
     document.addEventListener('keydown', onPopupEscKeydown);
   }
+  return undefined;
 };
 
 const onPictureEnterKeydown = (evt) => {
@@ -142,6 +145,7 @@ const onPictureEnterKeydown = (evt) => {
     evt.preventDefault();
     onPictureClick(evt);
   }
+  return undefined;
 };
 
 export {
