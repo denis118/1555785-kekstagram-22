@@ -26,40 +26,23 @@ const cssRules = document.styleSheets[document.styleSheets.length - 1].cssRules;
 const createBuilder = () => {
   const buildSlider = (evtClassName) => {
     const sliderSet = {};
-    const chrome = Object.create(
-      Object.getPrototypeOf(sliderTemplates.chrome), Object.getOwnPropertyDescriptors(sliderTemplates.chrome),
-    );
-    const sepia = Object.create(
-      Object.getPrototypeOf(sliderTemplates.sepia), Object.getOwnPropertyDescriptors(sliderTemplates.sepia),
-    );
-    const marvin = Object.create(
-      Object.getPrototypeOf(sliderTemplates.marvin), Object.getOwnPropertyDescriptors(sliderTemplates.marvin),
-    );
-    const phobos = Object.create(
-      Object.getPrototypeOf(sliderTemplates.phobos), Object.getOwnPropertyDescriptors(sliderTemplates.phobos),
-    );
-    const heat = Object.create(
-      Object.getPrototypeOf(sliderTemplates.heat), Object.getOwnPropertyDescriptors(sliderTemplates.heat),
-    );
-    const adds = Object.create(
-      Object.getPrototypeOf(extraOptions), Object.getOwnPropertyDescriptors(extraOptions),
-    );
     if (evtClassName.match(/.+chrome$/)) {
-      Object.assign(sliderSet, chrome);
+      Object.assign(sliderSet, sliderTemplates.chrome);
     }
     if (evtClassName.match(/.+sepia$/)) {
-      Object.assign(sliderSet, sepia);
+      Object.assign(sliderSet, sliderTemplates.sepia);
     }
     if (evtClassName.match(/.+marvin$/)) {
-      Object.assign(sliderSet, marvin);
+      Object.assign(sliderSet, sliderTemplates.marvin);
     }
     if (evtClassName.match(/.+phobos$/)) {
-      Object.assign(sliderSet, phobos);
+      Object.assign(sliderSet, sliderTemplates.phobos);
     }
     if (evtClassName.match(/.+heat$/)) {
-      Object.assign(sliderSet, heat);
+      Object.assign(sliderSet, sliderTemplates.heat);
     }
-    return Object.assign(sliderSet, adds);
+    console.log(Object.assign(sliderSet, extraOptions))
+    return Object.assign(sliderSet, extraOptions);
   };
   const sliderTemplates = {
     chrome: {
