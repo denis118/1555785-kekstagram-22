@@ -10,6 +10,11 @@ import {
   onScaleControlBiggerClick
 } from './scale.js';
 
+import {
+  effectsList,
+  onEffectsListClick
+} from './effects.js';
+
 const body = document.body;
 const uploadFile = document.querySelector('#upload-file');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
@@ -22,6 +27,7 @@ const onUploadFileChange = (evt) => {
   setUserScale();
   scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
   scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
+  effectsList.addEventListener('click', onEffectsListClick);
   uploadCancel.addEventListener('click', onUploadCancelClick);
   document.addEventListener('keydown', onUploadFileEscKeydown);
   return undefined;
@@ -34,6 +40,7 @@ const onUploadCancelClick = (evt) => {
   imgUploadOverlay.classList.add('hidden');
   scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
   scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
+  effectsList.removeEventListener('click', onEffectsListClick);
   uploadCancel.removeEventListener('click', onUploadCancelClick);
   document.removeEventListener('keydown', onUploadFileEscKeydown);
   return undefined;

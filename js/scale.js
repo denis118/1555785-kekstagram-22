@@ -6,7 +6,7 @@ const DEFAULT_SCALE_COEFFICIENT = 1;
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
 const scaleControlValue = document.querySelector('.scale__control--value');
-const userScaleSetting = document.querySelector('input[name="user-scale-setting"]')
+const userScale = document.querySelector('input[name="user-scale"]');
 const imgUploadPreview = document.querySelector('.img-upload__preview');
 const openedPicture = imgUploadPreview.querySelector('img[alt="Предварительный просмотр фотографии"]');
 
@@ -35,7 +35,7 @@ const insertScaleValue = (elem = openedPicture, value = `scale(${DEFAULT_SCALE_C
 
 const setUserScale = (delta = DEFAULT_SCALE_COEFFICIENT) => {
   scaleControlValue.value = getPercentages(delta) + '%';
-  userScaleSetting.value = scaleControlValue.value;
+  userScale.value = scaleControlValue.value;
   insertScaleValue(openedPicture, `scale(${delta})`)
   return undefined;
 };
@@ -71,6 +71,7 @@ const onScaleControlBiggerClick = (evt) => {
 };
 
 export {
+  openedPicture,
   scaleControlSmaller,
   scaleControlBigger,
   setUserScale,

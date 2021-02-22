@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="./nouislider/nouislider.css">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -48,7 +49,7 @@
                     <button type="button" class="scale__control  scale__control--smaller">Уменьшить</button>
                     <input type="text" class="scale__control  scale__control--value" value="55%" title="Image Scale" name="scale" readonly>
                     <button type="button" class="scale__control  scale__control--bigger">Увеличить</button>
-                    <input type="hidden" name="user-scale-setting" value="55%">
+                    <input type="hidden" name="user-scale" value="55%">
                   </fieldset>
 
                   <!-- Предварительный просмотр изображения -->
@@ -232,5 +233,6 @@
   </template>
 
   <script type="module" src="./js/main.js" defer></script>
+  <script src="./nouislider/nouislider.js"></script>
 </body>
 </html>
