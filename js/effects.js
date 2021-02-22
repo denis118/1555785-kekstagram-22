@@ -4,65 +4,54 @@ import {
 
 import {
   slider,
-  switchSlider
+  switchSlider,
+  checkLabel
 } from './slider.js';
 
 const effectsList = document.querySelector('.effects__list');
-const noneEffectRadio = document.querySelector('input[id="effect-none"]');
-const chromeEffectRadio = document.querySelector('input[id="effect-chrome"]');
-const sepiaEffectRadio = document.querySelector('input[id="effect-sepia"]');
-const marvinEffectRadio = document.querySelector('input[id="effect-marvin"]');
-const phobosEffectRadio = document.querySelector('input[id="effect-phobos"]');
-const heatEffectRadio = document.querySelector('input[id="effect-heat"]');
+const radios = document.querySelectorAll('input[type="radio"][name="effect"]');
+const radiosArray = Array.from(radios);
 
-const applyUserEffect = (evtClassName, element, ...rest) => {
+const applyUserEffect = (evt, element, radios) => {
   if (element.className.includes('effects__preview')) {
     const subStrStartIndex = element.className.indexOf('effects__preview');
     const newClassName = element.className.slice(0, subStrStartIndex).trim();
     element.className = newClassName;
   }
+  let evtClassName = evt.target.className;
+  if (evtClassName.includes('effects__label')) {
+    evtClassName = checkLabel(evt);
+  }
   if (evtClassName.match(/.+none$/)) {
-    rest[0].checked = true;
+    radios.find((item) => item.id.match(/.+none$/)).checked = true;
   }
   if (evtClassName.match(/.+chrome$/)) {
     element.className += ' ' + 'effects__preview--chrome';
-    rest[1].checked = true;
+    radios.find((item) => item.id.match(/.+chrome$/)).checked = true;
   }
   if (evtClassName.match(/.+sepia$/)) {
     element.className += ' ' + 'effects__preview--sepia';
-    rest[2].checked = true;
+    radios.find((item) => item.id.match(/.+sepia$/)).checked = true;
   }
   if (evtClassName.match(/.+marvin$/)) {
     element.className += ' ' + 'effects__preview--marvin';
-    rest[3].checked = true;
+    radios.find((item) => item.id.match(/.+marvin$/)).checked = true;
   }
   if (evtClassName.match(/.+phobos$/)) {
     element.className += ' ' + 'effects__preview--phobos';
-    rest[4].checked = true;
+    radios.find((item) => item.id.match(/.+phobos$/)).checked = true;
   }
   if (evtClassName.match(/.+heat$/)) {
     element.className += ' ' + 'effects__preview--heat';
-    rest[5].checked = true;
+    radios.find((item) => item.id.match(/.+heat$/)).checked = true;
   }
   return undefined;
 };
 
 const onEffectsListClick = (evt) => {
   evt.preventDefault();
-  applyUserEffect(
-    evt.target.className,
-    openedPicture,
-    noneEffectRadio,
-    chromeEffectRadio,
-    sepiaEffectRadio,
-    marvinEffectRadio,
-    phobosEffectRadio,
-    heatEffectRadio,
-  );
-  switchSlider(
-    evt.target.className,
-    slider,
-  );
+  applyUserEffect(evt, openedPicture, radiosArray);
+  switchSlider(evt, slider);
 };
 
 export {
