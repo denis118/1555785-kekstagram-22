@@ -3,9 +3,8 @@ import {
 } from './scale.js';
 
 import {
-  slider,
   switchSlider,
-  checkLabel
+  emulateClassName
 } from './slider.js';
 
 const effectsList = document.querySelector('.effects__list');
@@ -20,7 +19,7 @@ const applyUserEffect = (evt, element, radios) => {
   }
   let evtClassName = evt.target.className;
   if (evtClassName.includes('effects__label')) {
-    evtClassName = checkLabel(evt);
+    evtClassName = emulateClassName(evt);
   }
   if (evtClassName.match(/.+none$/)) {
     radios.find((item) => item.id.match(/.+none$/)).checked = true;
@@ -51,7 +50,7 @@ const applyUserEffect = (evt, element, radios) => {
 const onEffectsListClick = (evt) => {
   evt.preventDefault();
   applyUserEffect(evt, openedPicture, radiosArray);
-  switchSlider(evt, slider);
+  switchSlider(evt);
 };
 
 export {
