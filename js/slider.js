@@ -32,23 +32,18 @@ const createBuilder = () => {
     const sliderSet = {};
     if (evtClassName.match(/.+chrome$/)) {
       Object.assign(sliderSet, sliderTemplates.chrome);
-      effectLevelValue.value = CHROME_MAX;
     }
     if (evtClassName.match(/.+sepia$/)) {
       Object.assign(sliderSet, sliderTemplates.sepia);
-      effectLevelValue.value = SEPIA_MAX;
     }
     if (evtClassName.match(/.+marvin$/)) {
       Object.assign(sliderSet, sliderTemplates.marvin);
-      effectLevelValue.value = MARVIN_MAX + '%';
     }
     if (evtClassName.match(/.+phobos$/)) {
       Object.assign(sliderSet, sliderTemplates.phobos);
-      effectLevelValue.value = PHOBOS_MAX + 'px';
     }
     if (evtClassName.match(/.+heat$/)) {
       Object.assign(sliderSet, sliderTemplates.heat);
-      effectLevelValue.value = HEAT_MAX;
     }
     return Object.assign(sliderSet, extraOptions);
   };
@@ -111,6 +106,25 @@ const createBuilder = () => {
   return buildSlider;
 };
 
+const setEffectStartValue = (evtClassName) => {
+  if (evtClassName.match(/.+chrome$/)) {
+    effectLevelValue.value = CHROME_MAX;
+  }
+  if (evtClassName.match(/.+sepia$/)) {
+    effectLevelValue.value = SEPIA_MAX;
+  }
+  if (evtClassName.match(/.+marvin$/)) {
+    effectLevelValue.value = MARVIN_MAX;
+  }
+  if (evtClassName.match(/.+phobos$/)) {
+    effectLevelValue.value = PHOBOS_MAX;
+  }
+  if (evtClassName.match(/.+heat$/)) {
+    effectLevelValue.value = HEAT_MAX;
+  }
+  return undefined;
+};
+
 const checkLabel = (evt) => {
   let evtClassName = evt.target.className;
   if (evtClassName.includes('effects__label')) {
@@ -160,6 +174,7 @@ const switchSlider = (evt, sliderElement) => {
     sliderElement.noUiSlider.destroy();
   }
   noUiSlider.create(sliderElement, createBuilder()(evtClassName));
+  setEffectStartValue(evtClassName);
   sliderElement.noUiSlider.on('update', (values, handle) => {
     if (evtClassName.match(/.+chrome$/)) {
       openedPicture.style.filter = `grayscale(${values[handle]})`;
