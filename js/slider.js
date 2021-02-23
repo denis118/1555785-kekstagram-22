@@ -1,5 +1,9 @@
 /* global noUiSlider:readonly */
 
+import {
+  openedPicture
+} from './scale.js';
+
 const CHROME_MIN = 0;
 const CHROME_MAX = 1;
 const CHROME_STEP = 0.1;
@@ -22,20 +26,6 @@ const HEAT_STEP = 0.1;
 
 const slider = document.querySelector('.effect-level__slider');
 const effectLevelValue = document.querySelector('.effect-level__value');
-const cssRules = document.styleSheets[document.styleSheets.length - 1].cssRules;
-
-const getEffectsRules = (rules) => {
-  const effectsRules = [];
-  for (let i in rules) {
-    let selector = rules[i].selectorText;
-    if (selector !== undefined) {
-      if (selector.match(/\.effects__preview--\S+/)) {
-        effectsRules.push(rules[i]);
-      }
-    }
-  }
-  return effectsRules;
-};
 
 const createBuilder = () => {
   const buildSlider = (evtClassName) => {
@@ -159,6 +149,7 @@ const switchSlider = (evt, sliderElement) => {
     if (!sliderElement.noUiSlider) {
       return undefined;
     } else {
+      openedPicture.style.filter = '';
       sliderElement.noUiSlider.off('update');
       sliderElement.noUiSlider.destroy();
       effectLevelValue.value = '';
@@ -171,28 +162,23 @@ const switchSlider = (evt, sliderElement) => {
   noUiSlider.create(sliderElement, createBuilder()(evtClassName));
   sliderElement.noUiSlider.on('update', (values, handle) => {
     if (evtClassName.match(/.+chrome$/)) {
-      const chromeCssRule = getEffectsRules(cssRules).filter((item) => item.selectorText.match(/.+chrome$/))[0];
-      chromeCssRule.style.filter = `grayscale(${values[handle]})`;
+      openedPicture.style.filter = `grayscale(${values[handle]})`;
       effectLevelValue.value = values[handle];
     }
     if (evtClassName.match(/.+sepia$/)) {
-      const sepiaCssRule = getEffectsRules(cssRules).filter((item) => item.selectorText.match(/.+sepia$/))[0];
-      sepiaCssRule.style.filter = `sepia(${values[handle]})`;
+      openedPicture.style.filter = `sepia(${values[handle]})`;
       effectLevelValue.value = values[handle];
     }
     if (evtClassName.match(/.+marvin$/)) {
-      const marvinCssRule = getEffectsRules(cssRules).filter((item) => item.selectorText.match(/.+marvin$/))[0];
-      marvinCssRule.style.filter = `invert(${values[handle]}%)`;
+      openedPicture.style.filter = `invert(${values[handle]}%)`;
       effectLevelValue.value = values[handle];
     }
     if (evtClassName.match(/.+phobos$/)) {
-      const phobosCssRule = getEffectsRules(cssRules).filter((item) => item.selectorText.match(/.+phobos$/))[0];
-      phobosCssRule.style.filter = `blur(${values[handle]}px)`;
+      openedPicture.style.filter = `blur(${values[handle]}px)`;
       effectLevelValue.value = values[handle];
     }
     if (evtClassName.match(/.+heat$/)) {
-      const heatCssRule = getEffectsRules(cssRules).filter((item) => item.selectorText.match(/.+heat$/))[0];
-      heatCssRule.style.filter = `brightness(${values[handle]})`;
+      openedPicture.style.filter = `brightness(${values[handle]})`;
       effectLevelValue.value = values[handle];
     }
   });
