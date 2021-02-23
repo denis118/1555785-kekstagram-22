@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="./nouislider/nouislider.css">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -34,7 +35,7 @@
 
             <!-- Изначальное состояние поля для загрузки изображения -->
             <fieldset class="img-upload__start">
-              <input type="file" id="upload-file" class="img-upload__input  visually-hidden" name="filename" required>
+              <input type="file" id="upload-file" class="img-upload__input  visually-hidden" name="filename" accept="image/png, image/jpeg" required>
               <label for="upload-file" class="img-upload__label  img-upload__control">Загрузить</label>
             </fieldset>
 
@@ -48,6 +49,7 @@
                     <button type="button" class="scale__control  scale__control--smaller">Уменьшить</button>
                     <input type="text" class="scale__control  scale__control--value" value="55%" title="Image Scale" name="scale" readonly>
                     <button type="button" class="scale__control  scale__control--bigger">Увеличить</button>
+                    <input type="hidden" name="user-scale" value="55%">
                   </fieldset>
 
                   <!-- Предварительный просмотр изображения -->
@@ -231,5 +233,6 @@
   </template>
 
   <script type="module" src="./js/main.js" defer></script>
+  <script src="./nouislider/nouislider.js"></script>
 </body>
 </html>

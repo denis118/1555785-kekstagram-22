@@ -12,7 +12,7 @@ const AVATAR_WIDTH = 35;
 const AVATAR_HEIGHT = 35;
 const DISPLAYED_COMMENTS_AMOUNT = 5;
 
-const Elements = new function () { // словарь
+const Elements = new function () {
   this.body = document.body;
   this.bigPicture = document.querySelector('.big-picture');
   this.bigPictureImgBox = this.bigPicture.querySelector('.big-picture__img');
@@ -106,20 +106,22 @@ viewImage.hideExtraComments = function () {
   return this;
 };
 
-const pictureCloseHandler = (evt) => {
+const onPictureClose = (evt) => {
   evt.preventDefault();
   viewImage.closeBigPicture();
-  viewImage.bigPictureCancel.removeEventListener('click', pictureCloseHandler);
+  viewImage.bigPictureCancel.removeEventListener('click', onPictureClose);
   document.removeEventListener('keydown', onPopupEscKeydown);
+  return undefined;
 };
 
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
-    pictureCloseHandler(evt);
+    onPictureClose(evt);
   }
+  return undefined;
 };
 
-const pictureOpenHandler = (evt) => {
+const onPictureClick = (evt) => {
   evt.preventDefault();
 
   if (evt.target.matches('img[class="picture__img"]') || evt.target.matches('a[class="picture"]')) {
@@ -132,19 +134,21 @@ const pictureOpenHandler = (evt) => {
     viewImage.socialComments.appendChild(viewImage.commentsFragment);
     viewImage.hideExtraComments()
 
-    viewImage.bigPictureCancel.addEventListener('click', pictureCloseHandler);
+    viewImage.bigPictureCancel.addEventListener('click', onPictureClose);
     document.addEventListener('keydown', onPopupEscKeydown);
   }
+  return undefined;
 };
 
 const onPictureEnterKeydown = (evt) => {
   if (isEnterEvent(evt)) {
     evt.preventDefault();
-    pictureOpenHandler(evt);
+    onPictureClick(evt);
   }
+  return undefined;
 };
 
 export {
-  pictureOpenHandler,
+  onPictureClick,
   onPictureEnterKeydown
 };
