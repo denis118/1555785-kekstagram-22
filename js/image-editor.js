@@ -15,10 +15,19 @@ import {
   onEffectsListClick
 } from './effects.js';
 
+import {
+  searchInvalidities
+} from './hashtags.js';
+
 const body = document.body;
 const uploadFile = document.querySelector('#upload-file');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
 const uploadCancel = document.querySelector('#upload-cancel');
+const uploadSubmit = document.querySelector('button[id="upload-submit"]');
+
+const onUploadSubmitClick = (evt) => {
+  if (searchInvalidities()) {evt.preventDefault()}
+};
 
 const onUploadFileChange = (evt) => {
   evt.preventDefault();
@@ -29,6 +38,7 @@ const onUploadFileChange = (evt) => {
   scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
   effectsList.addEventListener('click', onEffectsListClick);
   uploadCancel.addEventListener('click', onUploadCancelClick);
+  uploadSubmit.addEventListener('click', onUploadSubmitClick);
   document.addEventListener('keydown', onUploadFileEscKeydown);
   return undefined;
 };
@@ -42,6 +52,7 @@ const onUploadCancelClick = (evt) => {
   scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
   effectsList.removeEventListener('click', onEffectsListClick);
   uploadCancel.removeEventListener('click', onUploadCancelClick);
+  uploadSubmit.removeEventListener('click', onUploadSubmitClick);
   document.removeEventListener('keydown', onUploadFileEscKeydown);
   return undefined;
 };

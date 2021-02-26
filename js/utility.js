@@ -13,12 +13,12 @@ const getNumber = function (lowerLimit, upperLimit) {
   // https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 };
 
-const validateStringLength = function (stringToCheck, maxLength = COMMENT_MAX_LENGTH) {
+const validateStringLength = function (stringToCheck, maxLength) {
   if (typeof stringToCheck !== 'string') {
     return new Error('Первый аргумент функции должен иметь тип "string"');
   }
   if (maxLength < 0) {
-    return new Error('Значение длины комментария должно быть положительным числом, включая ноль');
+    return new Error('Значение длины строки должно быть положительным числом, включая ноль');
   }
   return (stringToCheck.length <= maxLength) ? true : false;
 };
@@ -40,7 +40,7 @@ const mixWords = function (firstMember, secondMember) {
 const chooseSentence = function (array) {
   const validSentences = [];
   for (let i = 0; i < array.length; i++) {
-    if (validateStringLength(array[i])) {
+    if (validateStringLength(array[i], COMMENT_MAX_LENGTH)) {
       validSentences.push((array.slice(i, i + 1))[0]);
     }
   }
