@@ -1,9 +1,13 @@
 import {
-  validateStringLength
+  validateStringLength,
+  markField
 } from './utility.js';
 
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_HASHTAGS_AMOUNT = 5;
+
+const hashTagsElement = document.querySelector('input[class="text__hashtags"]');
+const changeOutlineStyle = markField(hashTagsElement);
 
 const getTagsArray = string => string.trim().split(' ').map(item => item.toLowerCase());
 const searchFalse = (array, func) => array.map(item => func(item)).includes(false);
@@ -13,8 +17,7 @@ const checkNonUniqueness = arr => [...new Set(arr)].length !== arr.length ? true
 const checkTagLength = (string, length = MAX_HASHTAG_LENGTH) => validateStringLength(string, length);
 const checkTagsCountExceeding = (array, maxLength = MAX_HASHTAGS_AMOUNT) => array.length > maxLength ? true : false;
 
-const searchInvalidities = () => {
-  const hashTagsElement = document.querySelector('input[class="text__hashtags"]');
+const searchInvalidHashTags = () => {
   let stopSubmit = false;
   if (!hashTagsElement.value) {return stopSubmit}
   const tagsArray = getTagsArray(hashTagsElement.value);
@@ -49,11 +52,15 @@ const searchInvalidities = () => {
   if (invalidities.length) {
     hashTagsElement.setCustomValidity(invalidities.join('. \n'));
     hashTagsElement.reportValidity();
+    changeOutlineStyle('1px solid red');
     stopSubmit = true;
+  } else {
+    hashTagsElement.setCustomValidity('');
+    changeOutlineStyle('');
   }
   return stopSubmit;
 };
 
 export {
-  searchInvalidities
+  searchInvalidHashTags
 };

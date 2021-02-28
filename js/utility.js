@@ -1,4 +1,4 @@
-const COMMENT_MAX_LENGTH = 140;
+const MAX_COMMENT_LENGTH = 140;
 
 const getNumber = function (lowerLimit, upperLimit) {
   if (lowerLimit < 0 || upperLimit < 0) {
@@ -40,7 +40,7 @@ const mixWords = function (firstMember, secondMember) {
 const chooseSentence = function (array) {
   const validSentences = [];
   for (let i = 0; i < array.length; i++) {
-    if (validateStringLength(array[i], COMMENT_MAX_LENGTH)) {
+    if (validateStringLength(array[i], MAX_COMMENT_LENGTH)) {
       validSentences.push((array.slice(i, i + 1))[0]);
     }
   }
@@ -59,7 +59,22 @@ const extractPath = (string) => {
   return new URL(string).pathname;
 };
 
+const markField = (element) => {
+  const currentOutlineStyle = element.style.outline;
+  const changeOutlineStyle = (outlineStyle) => {
+    if (outlineStyle) {
+      element.style.outline = outlineStyle;
+      return undefined;
+    } else {
+      element.style.outline = currentOutlineStyle;
+    }
+    return undefined;
+  };
+  return changeOutlineStyle;
+};
+
 export {
+  MAX_COMMENT_LENGTH,
   getNumber,
   validateStringLength,
   setId,
@@ -67,5 +82,6 @@ export {
   chooseSentence,
   isEscEvent,
   isEnterEvent,
-  extractPath
+  extractPath,
+  markField
 };

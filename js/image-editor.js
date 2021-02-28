@@ -16,8 +16,13 @@ import {
 } from './effects.js';
 
 import {
-  searchInvalidities
+  searchInvalidHashTags
 } from './hashtags.js';
+
+import {
+  commentField,
+  onCommentFieldInput
+} from './comments.js';
 
 const body = document.body;
 const uploadFile = document.querySelector('#upload-file');
@@ -26,7 +31,7 @@ const uploadCancel = document.querySelector('#upload-cancel');
 const uploadSubmit = document.querySelector('button[id="upload-submit"]');
 
 const onUploadSubmitClick = (evt) => {
-  if (searchInvalidities()) {evt.preventDefault()}
+  if (searchInvalidHashTags()) {evt.preventDefault()}
 };
 
 const onUploadFileChange = (evt) => {
@@ -39,6 +44,7 @@ const onUploadFileChange = (evt) => {
   effectsList.addEventListener('click', onEffectsListClick);
   uploadCancel.addEventListener('click', onUploadCancelClick);
   uploadSubmit.addEventListener('click', onUploadSubmitClick);
+  commentField.addEventListener('input', onCommentFieldInput);
   document.addEventListener('keydown', onUploadFileEscKeydown);
   return undefined;
 };
@@ -53,6 +59,7 @@ const onUploadCancelClick = (evt) => {
   effectsList.removeEventListener('click', onEffectsListClick);
   uploadCancel.removeEventListener('click', onUploadCancelClick);
   uploadSubmit.removeEventListener('click', onUploadSubmitClick);
+  commentField.removeEventListener('input', onCommentFieldInput);
   document.removeEventListener('keydown', onUploadFileEscKeydown);
   return undefined;
 };
