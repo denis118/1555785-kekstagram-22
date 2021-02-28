@@ -73,6 +73,10 @@ const markField = (element) => {
   return changeOutlineStyle;
 };
 
+const onTextFieldKeydown = (evt) => {
+  if (isEscEvent) {evt.stopPropagation()}
+};
+
 export {
   MAX_COMMENT_LENGTH,
   getNumber,
@@ -83,5 +87,6 @@ export {
   isEscEvent,
   isEnterEvent,
   extractPath,
-  markField
+  markField,
+  onTextFieldKeydown
 };

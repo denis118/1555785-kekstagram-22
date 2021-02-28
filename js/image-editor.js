@@ -16,12 +16,19 @@ import {
 } from './effects.js';
 
 import {
-  searchInvalidHashTags
+  hashTagsField,
+  checkInvalidHashTags,
+  onHashTagsInput,
+  searchSingleHash,
+  onHashTagsFocus,
+  onHashTagsBlur
 } from './hashtags.js';
 
 import {
-  commentField,
-  onCommentFieldInput
+  commentsField,
+  onCommentsFieldInput,
+  onCommentsFocus,
+  onCommentsBlur
 } from './comments.js';
 
 const body = document.body;
@@ -31,7 +38,8 @@ const uploadCancel = document.querySelector('#upload-cancel');
 const uploadSubmit = document.querySelector('button[id="upload-submit"]');
 
 const onUploadSubmitClick = (evt) => {
-  if (searchInvalidHashTags()) {evt.preventDefault()}
+  if (searchSingleHash() || checkInvalidHashTags()) {evt.preventDefault()}
+  return undefined;
 };
 
 const onUploadFileChange = (evt) => {
@@ -43,8 +51,13 @@ const onUploadFileChange = (evt) => {
   scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
   effectsList.addEventListener('click', onEffectsListClick);
   uploadCancel.addEventListener('click', onUploadCancelClick);
+  hashTagsField.addEventListener('input', onHashTagsInput);
+  hashTagsField.addEventListener('focus', onHashTagsFocus);
+  hashTagsField.addEventListener('blur', onHashTagsBlur);
+  commentsField.addEventListener('input', onCommentsFieldInput);
+  commentsField.addEventListener('focus', onCommentsFocus);
+  commentsField.addEventListener('blur', onCommentsBlur);
   uploadSubmit.addEventListener('click', onUploadSubmitClick);
-  commentField.addEventListener('input', onCommentFieldInput);
   document.addEventListener('keydown', onUploadFileEscKeydown);
   return undefined;
 };
@@ -58,8 +71,13 @@ const onUploadCancelClick = (evt) => {
   scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
   effectsList.removeEventListener('click', onEffectsListClick);
   uploadCancel.removeEventListener('click', onUploadCancelClick);
+  hashTagsField.removeEventListener('click', onHashTagsInput);
+  hashTagsField.removeEventListener('focus', onHashTagsFocus);
+  hashTagsField.removeEventListener('blur', onHashTagsBlur);
+  commentsField.removeEventListener('input', onCommentsFieldInput);
+  commentsField.removeEventListener('focus', onCommentsFocus);
+  commentsField.removeEventListener('blur', onCommentsBlur);
   uploadSubmit.removeEventListener('click', onUploadSubmitClick);
-  commentField.removeEventListener('input', onCommentFieldInput);
   document.removeEventListener('keydown', onUploadFileEscKeydown);
   return undefined;
 };
