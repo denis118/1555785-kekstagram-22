@@ -60,11 +60,11 @@ const setHeatFilterValue = value => openedPicture.style.filter = `brightness(${v
 
 const setEffectCurrentValue = value => getEffectLevelElement().value = value;
 
-const runChromeChangingCase = value => [setChromeFilterValue, setEffectCurrentValue].forEach(item => item(value));
-const runSepiaChangingCase = value => [setSepiaFilterValue, setEffectCurrentValue].forEach(item => item(value));
-const runMarvinChangingCase = value => [setMarvinFilterValue, setEffectCurrentValue].forEach(item => item(value));
-const runPhobosChangingCase = value => [setPhobosFilterValue, setEffectCurrentValue].forEach(item => item(value));
-const runHeatChangingCase = value => [setHeatFilterValue, setEffectCurrentValue].forEach(item => item(value));
+const setChromeStep = (step = CHROME_STEP) => getEffectLevelElement().setAttribute('step', step);
+const setSepiaStep = (step = SEPIA_STEP) => getEffectLevelElement().setAttribute('step', step);
+const setMarvinStep = (step = MARVIN_STEP) => getEffectLevelElement().setAttribute('step', step);
+const setPhobosStep = (step = PHOBOS_STEP) => getEffectLevelElement().setAttribute('step', step);
+const setHeatStep = (step = HEAT_STEP) => getEffectLevelElement().setAttribute('step', step);
 
 const emulateClassName = (evt) =>
   evt.target.getAttribute('for').match(/.+none$/) ? '--none' :
@@ -77,6 +77,7 @@ const emulateClassName = (evt) =>
 
 const processNoneCase = () => {
   const sliderElement = getSliderElement();
+  const effectLevelElement = getEffectLevelElement();
   if (!sliderElement.noUiSlider) {
     return undefined;
   } else {
@@ -84,6 +85,9 @@ const processNoneCase = () => {
     sliderElement.noUiSlider.off('update');
     sliderElement.noUiSlider.destroy();
     getEffectLevelElement().value = '';
+  }
+  if (effectLevelElement.getAttribute('step')) {
+    effectLevelElement.removeAttribute('step');
   }
   return undefined;
 };
@@ -96,11 +100,17 @@ const creatMarvinSlider = () => noUiSlider.create(getSliderElement(), buildMarvi
 const createPhobosSlider = () => noUiSlider.create(getSliderElement(), buildPhobosOptions());
 const createHeatSlider = () => noUiSlider.create(getSliderElement(), buildHeatOptions());
 
-const startChromeCase = () => [createChromeSlider, setChromeStartValue].forEach(item => item());
-const startSepiaCase = () => [createSepiaSlider, setSepiaStartValue].forEach(item => item());
-const startMarvinCase = () => [creatMarvinSlider, setMarvinStartValue].forEach(item => item());
-const startPhobosCase = () => [createPhobosSlider, setPhobosStartValue].forEach(item => item());
-const startHeatCase = () => [createHeatSlider, setHeatStartValue].forEach(item => item());
+const startChromeCase = () => [createChromeSlider, setChromeStartValue, setChromeStep].forEach(item => item());
+const startSepiaCase = () => [createSepiaSlider, setSepiaStartValue, setSepiaStep].forEach(item => item());
+const startMarvinCase = () => [creatMarvinSlider, setMarvinStartValue, setMarvinStep].forEach(item => item());
+const startPhobosCase = () => [createPhobosSlider, setPhobosStartValue, setPhobosStep].forEach(item => item());
+const startHeatCase = () => [createHeatSlider, setHeatStartValue, setHeatStep].forEach(item => item());
+
+const runChromeChangingCase = value => [setChromeFilterValue, setEffectCurrentValue].forEach(item => item(value));
+const runSepiaChangingCase = value => [setSepiaFilterValue, setEffectCurrentValue].forEach(item => item(value));
+const runMarvinChangingCase = value => [setMarvinFilterValue, setEffectCurrentValue].forEach(item => item(value));
+const runPhobosChangingCase = value => [setPhobosFilterValue, setEffectCurrentValue].forEach(item => item(value));
+const runHeatChangingCase = value => [setHeatFilterValue, setEffectCurrentValue].forEach(item => item(value));
 
 const switchSlider = (evt) => {
   let evtClassName = evt.target.className;
