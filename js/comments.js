@@ -7,11 +7,6 @@ import {
 const commentsField = document.querySelector('textarea[name="description"]');
 const changeOutlineStyle = markField(commentsField);
 
-/*
-У меня на компьютере (Ubuntu) onCommentsFieldInput не срабатывает пока у textarea указан атрибут maxlength.
-Ни Chrome, ни FireFox просто не дают ввести больше символов.
-*/
-
 const onCommentsFieldInput = () => {
   const valueLength = commentsField.value.length;
 
