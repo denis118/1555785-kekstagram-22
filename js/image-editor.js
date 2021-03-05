@@ -31,6 +31,11 @@ import {
   onCommentsBlur
 } from './comments.js';
 
+import {
+  imgUploadForm,
+  onImgUploadFormSubmit
+} from './form-submission.js';
+
 const body = document.body;
 const uploadFile = document.querySelector('#upload-file');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
@@ -51,6 +56,7 @@ const onUploadFileChange = (evt) => {
   scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
   effectsList.addEventListener('click', onEffectsListClick);
   uploadCancel.addEventListener('click', onUploadCancelClick);
+  imgUploadForm.addEventListener('submit', onImgUploadFormSubmit);
   hashTagsField.addEventListener('input', onHashTagsInput);
   hashTagsField.addEventListener('focus', onHashTagsFocus);
   hashTagsField.addEventListener('blur', onHashTagsBlur);
@@ -71,6 +77,7 @@ const onUploadCancelClick = (evt) => {
   scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
   effectsList.removeEventListener('click', onEffectsListClick);
   uploadCancel.removeEventListener('click', onUploadCancelClick);
+  imgUploadForm.removeEventListener('submit', onImgUploadFormSubmit);
   hashTagsField.removeEventListener('click', onHashTagsInput);
   hashTagsField.removeEventListener('focus', onHashTagsFocus);
   hashTagsField.removeEventListener('blur', onHashTagsBlur);
