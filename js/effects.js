@@ -55,5 +55,6 @@ const onEffectsListClick = (evt) => {
 
 export {
   effectsList,
-  onEffectsListClick
+  onEffectsListClick,
+  radiosArray
 };

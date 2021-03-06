@@ -12,8 +12,13 @@ import {
 
 import {
   effectsList,
-  onEffectsListClick
+  onEffectsListClick,
+  radiosArray
 } from './effects.js';
+
+import {
+  processNoneCase as resetEffects
+} from './slider.js';
 
 import {
   hashTagsField,
@@ -21,21 +26,34 @@ import {
   onHashTagsInput,
   searchSingleHash,
   onHashTagsFocus,
-  onHashTagsBlur
+  onHashTagsBlur,
+  clearHashTagsField
 } from './hashtags.js';
 
 import {
   commentsField,
   onCommentsFieldInput,
   onCommentsFocus,
-  onCommentsBlur
+  onCommentsBlur,
+  clearCommentsField
 } from './comments.js';
+
+import {
+  imgUploadForm,
+  onImgUploadFormSubmit
+} from './form-submission.js';
 
 const body = document.body;
 const uploadFile = document.querySelector('#upload-file');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
 const uploadCancel = document.querySelector('#upload-cancel');
 const uploadSubmit = document.querySelector('button[id="upload-submit"]');
+
+const resetFormData = () => {
+  radiosArray.find((item) => item.id.match(/.+none$/)).checked = true;
+  [resetEffects, clearHashTagsField, clearCommentsField].forEach(item => item());
+  return undefined;
+};
 
 const onUploadSubmitClick = (evt) => {
   if (searchSingleHash() || checkInvalidHashTags()) {evt.preventDefault()}
@@ -51,6 +69,7 @@ const onUploadFileChange = (evt) => {
   scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
   effectsList.addEventListener('click', onEffectsListClick);
   uploadCancel.addEventListener('click', onUploadCancelClick);
+  imgUploadForm.addEventListener('submit', onImgUploadFormSubmit);
   hashTagsField.addEventListener('input', onHashTagsInput);
   hashTagsField.addEventListener('focus', onHashTagsFocus);
   hashTagsField.addEventListener('blur', onHashTagsBlur);
@@ -67,10 +86,12 @@ const onUploadCancelClick = (evt) => {
   uploadFile.value = '';
   body.classList.remove('modal-open');
   imgUploadOverlay.classList.add('hidden');
+  resetFormData();
   scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
   scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
   effectsList.removeEventListener('click', onEffectsListClick);
   uploadCancel.removeEventListener('click', onUploadCancelClick);
+  imgUploadForm.removeEventListener('submit', onImgUploadFormSubmit);
   hashTagsField.removeEventListener('click', onHashTagsInput);
   hashTagsField.removeEventListener('focus', onHashTagsFocus);
   hashTagsField.removeEventListener('blur', onHashTagsBlur);
@@ -90,3 +111,7 @@ const onUploadFileEscKeydown = (evt) => {
 };
 
 uploadFile.addEventListener('change', onUploadFileChange);
+
+export {
+  onUploadCancelClick
+};

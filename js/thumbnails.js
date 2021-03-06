@@ -1,8 +1,4 @@
 import {
-  photoDescription
-} from './photo-description.js';
-
-import {
   onPictureClick,
   onPictureEnterKeydown
 } from './image-viewer.js';
@@ -12,31 +8,27 @@ const picture = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-const collectPictures = () => {
+const collectPictures = (photoDescriptions) => {
   const picturesFragment = document.createDocumentFragment();
-
-  for (let i = 0; i < photoDescription.length; i++) {
+  for (let i = 0; i < photoDescriptions.length; i++) {
     const newPicture = picture.cloneNode(true);
     const pictureImg = newPicture.querySelector('.picture__img');
     const pictureComments = newPicture.querySelector('.picture__comments');
     const pictureLikes = newPicture.querySelector('.picture__likes');
 
-    pictureImg.src = photoDescription[i].url;
-    pictureComments.textContent = photoDescription[i].comments.length;
-    pictureLikes.textContent = photoDescription[i].likes;
+    pictureImg.src = photoDescriptions[i].url;
+    pictureComments.textContent = photoDescriptions[i].comments.length;
+    pictureLikes.textContent = photoDescriptions[i].likes;
 
     picturesFragment.appendChild(newPicture);
   }
-
   return picturesFragment;
 };
 
-const renderPictures = () => {
-  picturesBlock.appendChild(collectPictures());
+const renderPictures = (data) => {
+  picturesBlock.appendChild(collectPictures(data));
   return undefined;
 };
-
-renderPictures();
 
 const onPicturesBlockMouseOver = (evt) => {
   if (evt.target.matches('img[class="picture__img"]')) {
@@ -70,3 +62,7 @@ picturesBlock.addEventListener('mouseover', onPicturesBlockMouseOver);
 picturesBlock.addEventListener('mouseout', onPicturesBlockMouseOut);
 picturesBlock.addEventListener('focus', onPicturesBlockFocus, true);
 picturesBlock.addEventListener('blur', onPicturesBlockBlur, true);
+
+export {
+  renderPictures
+};

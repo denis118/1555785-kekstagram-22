@@ -4,10 +4,6 @@ import {
   extractPath
 } from './utility.js';
 
-import {
-  photoDescription
-} from './photo-description.js';
-
 const AVATAR_WIDTH = 35;
 const AVATAR_HEIGHT = 35;
 const DISPLAYED_COMMENTS_AMOUNT = 5;
@@ -47,7 +43,7 @@ viewImage.closeBigPicture = function () {
 
 viewImage.searchMetaData = function (address) {
   const imageSrc = extractPath(address).slice(1);
-  const usedData = photoDescription.find((item) => item.url === imageSrc);
+  const usedData = this.photoDescriptions.find((item) => item.url === imageSrc);
   this.metaData = Object.create(Object.getPrototypeOf(usedData), Object.getOwnPropertyDescriptors(usedData));
   return this;
 };
@@ -62,7 +58,6 @@ viewImage.setPictureParams = function () {
 
 viewImage.createCommentsFragment = function () {
   const commentsFragment = document.createDocumentFragment();
-
   for (let i = 0; i < this.metaData.comments.length; i++) {
     const listItem = document.createElement('li');
     const image = document.createElement('img');
@@ -123,17 +118,14 @@ const onPopupEscKeydown = (evt) => {
 
 const onPictureClick = (evt) => {
   evt.preventDefault();
-
   if (evt.target.matches('img[class="picture__img"]') || evt.target.matches('a[class="picture"]')) {
     viewImage.openBigPicture()
       .searchMetaData(evt.target.src || evt.target.querySelector('.picture__img').src)
       .setPictureParams()
       .createCommentsFragment()
       .clearSocialComments();
-
     viewImage.socialComments.appendChild(viewImage.commentsFragment);
     viewImage.hideExtraComments()
-
     viewImage.bigPictureCancel.addEventListener('click', onPictureClose);
     document.addEventListener('keydown', onPopupEscKeydown);
   }
@@ -149,6 +141,7 @@ const onPictureEnterKeydown = (evt) => {
 };
 
 export {
+  viewImage,
   onPictureClick,
   onPictureEnterKeydown
 };

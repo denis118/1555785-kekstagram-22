@@ -81,7 +81,12 @@ const processNoneCase = () => {
   if (!sliderElement.noUiSlider) {
     return undefined;
   } else {
-    openedPicture.style.filter = '';
+    if (openedPicture.getAttribute('style')) {
+      openedPicture.removeAttribute('style');
+    }
+    if (openedPicture.getAttribute('class')) {
+      openedPicture.removeAttribute('class');
+    }
     sliderElement.noUiSlider.off('update');
     sliderElement.noUiSlider.destroy();
     getEffectLevelElement().value = '';
@@ -136,5 +141,6 @@ const switchSlider = (evt) => {
 
 export {
   switchSlider,
-  emulateClassName
+  emulateClassName,
+  processNoneCase
 };

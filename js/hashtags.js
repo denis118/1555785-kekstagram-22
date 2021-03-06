@@ -21,7 +21,6 @@ const checkTagsCountExceeding = (array, maxLength = MAX_HASHTAGS_AMOUNT) => arra
 const checkInvalidHashTags = () => {
   const tagsArray = getTagsArray(hashTagsField.value);
   let stopSubmit = false;
-  // на стадии ввода валидация одичных хэштегов пропускается
   if (searchFalse(tagsArray, checkSingleHash) || !hashTagsField.value) {
     hashTagsField.setCustomValidity('');
     if (hashTagsField.style.outline.match(/^red solid 1px$/)) {
@@ -98,11 +97,14 @@ const onHashTagsBlur = (evt) => {
   return undefined;
 };
 
+const clearHashTagsField = () => hashTagsField.value = '';
+
 export {
   hashTagsField,
   checkInvalidHashTags,
   onHashTagsInput,
   searchSingleHash,
   onHashTagsFocus,
-  onHashTagsBlur
+  onHashTagsBlur,
+  clearHashTagsField
 };
