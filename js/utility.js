@@ -151,6 +151,26 @@ const showMessage = () => (error, params = {}) => {
   return undefined;
 };
 
+const throttle = (func, ms) => {
+  let isThrottled = false;
+  let args = null;
+  let self = null;
+  return function () {
+    if (isThrottled) {
+      args = arguments;
+      self = this;
+      return undefined;
+    }
+    func.apply(this, arguments);
+    isThrottled = true;
+    setTimeout(() => {
+      isThrottled = false;
+      func.apply(self, args);
+    }, ms);
+    return undefined;
+  };
+}
+
 export {
   MAX_COMMENT_LENGTH,
   getNumber,
@@ -163,5 +183,6 @@ export {
   extractPath,
   markField,
   onTextFieldKeydown,
-  showMessage
+  showMessage,
+  throttle
 };

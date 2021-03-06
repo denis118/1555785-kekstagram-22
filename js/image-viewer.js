@@ -22,10 +22,10 @@ const Elements = new function () {
   this.bigPictureCancel = this.bigPicture.querySelector('.big-picture__cancel');
 };
 
-const viewImage = function () {};
-Object.assign(viewImage, Elements);
+const viewImages = function () {};
+Object.assign(viewImages, Elements);
 
-viewImage.openBigPicture = function () {
+viewImages.openBigPicture = function () {
   this.bigPicture.classList.remove('hidden');
   this.socialCommentsLoader.classList.add('hidden');
   this.socialCommentCount.classList.add('hidden');
@@ -33,7 +33,7 @@ viewImage.openBigPicture = function () {
   return this;
 };
 
-viewImage.closeBigPicture = function () {
+viewImages.closeBigPicture = function () {
   this.bigPicture.classList.add('hidden');
   this.socialCommentCount.classList.remove('hidden');
   this.socialCommentsLoader.classList.remove('hidden');
@@ -41,14 +41,14 @@ viewImage.closeBigPicture = function () {
   return this;
 };
 
-viewImage.searchMetaData = function (address) {
+viewImages.searchMetaData = function (address) {
   const imageSrc = extractPath(address).slice(1);
   const usedData = this.photoDescriptions.find((item) => item.url === imageSrc);
   this.metaData = Object.create(Object.getPrototypeOf(usedData), Object.getOwnPropertyDescriptors(usedData));
   return this;
 };
 
-viewImage.setPictureParams = function () {
+viewImages.setPictureParams = function () {
   this.bigPictureImg.src = this.metaData.url;
   this.likesCount.textContent = this.metaData.likes;
   this.commentsCount.textContent = this.metaData.comments.length;
@@ -56,7 +56,7 @@ viewImage.setPictureParams = function () {
   return this;
 };
 
-viewImage.createCommentsFragment = function () {
+viewImages.createCommentsFragment = function () {
   const commentsFragment = document.createDocumentFragment();
   for (let i = 0; i < this.metaData.comments.length; i++) {
     const listItem = document.createElement('li');
@@ -83,7 +83,7 @@ viewImage.createCommentsFragment = function () {
   return this;
 };
 
-viewImage.clearSocialComments = function () {
+viewImages.clearSocialComments = function () {
   if (this.socialComments.children.length) {
     for (let i = this.socialComments.children.length - 1; i >= 0; i--) {
       this.socialComments.removeChild(this.socialComments.children[i]);
@@ -92,7 +92,7 @@ viewImage.clearSocialComments = function () {
   return this;
 };
 
-viewImage.hideExtraComments = function () {
+viewImages.hideExtraComments = function () {
   if (this.socialComments.children.length > DISPLAYED_COMMENTS_AMOUNT) {
     for (let i = this.socialComments.children.length - 1; i >= DISPLAYED_COMMENTS_AMOUNT; i--) {
       this.socialComments.children[i].classList.add('hidden');
@@ -103,8 +103,8 @@ viewImage.hideExtraComments = function () {
 
 const onPictureClose = (evt) => {
   evt.preventDefault();
-  viewImage.closeBigPicture();
-  viewImage.bigPictureCancel.removeEventListener('click', onPictureClose);
+  viewImages.closeBigPicture();
+  viewImages.bigPictureCancel.removeEventListener('click', onPictureClose);
   document.removeEventListener('keydown', onPopupEscKeydown);
   return undefined;
 };
@@ -119,14 +119,14 @@ const onPopupEscKeydown = (evt) => {
 const onPictureClick = (evt) => {
   evt.preventDefault();
   if (evt.target.matches('img[class="picture__img"]') || evt.target.matches('a[class="picture"]')) {
-    viewImage.openBigPicture()
+    viewImages.openBigPicture()
       .searchMetaData(evt.target.src || evt.target.querySelector('.picture__img').src)
       .setPictureParams()
       .createCommentsFragment()
       .clearSocialComments();
-    viewImage.socialComments.appendChild(viewImage.commentsFragment);
-    viewImage.hideExtraComments()
-    viewImage.bigPictureCancel.addEventListener('click', onPictureClose);
+    viewImages.socialComments.appendChild(viewImages.commentsFragment);
+    viewImages.hideExtraComments()
+    viewImages.bigPictureCancel.addEventListener('click', onPictureClose);
     document.addEventListener('keydown', onPopupEscKeydown);
   }
   return undefined;
@@ -141,7 +141,7 @@ const onPictureEnterKeydown = (evt) => {
 };
 
 export {
-  viewImage,
+  viewImages,
   onPictureClick,
   onPictureEnterKeydown
 };

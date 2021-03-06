@@ -7,8 +7,12 @@ import {
 } from './thumbnails.js';
 
 import {
-  viewImage
+  viewImages
 } from './image-viewer.js';
+
+import {
+  filterImages
+} from './image-filter.js';
 
 const onLoadingError = showMessage();
 
@@ -22,7 +26,9 @@ const getData = () => {
     })
     .then((json) => {
       renderPictures(json);
-      viewImage.photoDescriptions = json;
+      viewImages.photoDescriptions = json;
+      filterImages.stock = json;
+      filterImages.showFilters();
       return undefined;
     })
     .catch((error) => onLoadingError(error, {
