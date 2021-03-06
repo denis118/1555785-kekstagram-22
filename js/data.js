@@ -22,9 +22,6 @@ const getData = () => {
     })
     .then((json) => {
       renderPictures(json);
-      return json;
-    })
-    .then((json) => {
       viewImage.photoDescriptions = json;
       return undefined;
     })

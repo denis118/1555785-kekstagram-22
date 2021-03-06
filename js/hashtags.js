@@ -97,11 +97,14 @@ const onHashTagsBlur = (evt) => {
   return undefined;
 };
 
+const clearHashTagsField = () => hashTagsField.value = '';
+
 export {
   hashTagsField,
   checkInvalidHashTags,
   onHashTagsInput,
   searchSingleHash,
   onHashTagsFocus,
-  onHashTagsBlur
+  onHashTagsBlur,
+  clearHashTagsField
 };

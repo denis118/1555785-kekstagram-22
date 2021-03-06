@@ -33,9 +33,12 @@ const onCommentsBlur = (evt) => {
   return undefined;
 };
 
+const clearCommentsField = () => commentsField.value = '';
+
 export {
   commentsField,
   onCommentsFieldInput,
   onCommentsFocus,
-  onCommentsBlur
+  onCommentsBlur,
+  clearCommentsField
 };

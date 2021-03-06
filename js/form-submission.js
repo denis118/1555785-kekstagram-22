@@ -2,6 +2,10 @@ import {
   showMessage
 } from './utility.js';
 
+import {
+  onUploadCancelClick as closeImageEditor
+} from './image-editor.js';
+
 const imgUploadForm = document.querySelector('#upload-select-image');
 const onSuccess = showMessage();
 const onError = showMessage();
@@ -17,13 +21,15 @@ const onImgUploadFormSubmit = (evt) => {
     },
   )
     .then((response) => {
-      if (!response.ok) {
-        throw new Error();
-      }
+      if (!response.ok) {throw new Error()}
+      closeImageEditor(evt);
       onSuccess();
       return undefined;
     })
-    .catch((error) => onError(error));
+    .catch((error) => {
+      closeImageEditor(evt);
+      onError(error);
+    });
   return undefined;
 };
 

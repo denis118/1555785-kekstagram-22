@@ -98,9 +98,11 @@ const cloneSuccessNode = () => {
 };
 
 const showMessage = () => (error, params = {}) => {
+  const main = document.querySelector('main');
   const fragment = document.createDocumentFragment();
   let newNode = null;
   let newNodeButton = null;
+
   if (error) {
     const [newError, errorTitle, errorButton] = cloneErrorNode();
     if (params.title) {
@@ -122,10 +124,30 @@ const showMessage = () => (error, params = {}) => {
     newNode = newSuccess;
     newNodeButton = successButton;
   }
+
   fragment.appendChild(newNode);
-  document.body.appendChild(fragment);
-  const onButtonClick = () => document.body.removeChild(newNode);
-  newNodeButton.addEventListener('click', onButtonClick, {once: true})
+  main.appendChild(fragment);
+
+  const onMessageButtonClick = () => {
+    main.removeChild(newNode);
+    document.removeEventListener('click', onDocumentClick);
+    document.removeEventListener('keydown', onDocumentEscKeydown);
+    return undefined;
+  };
+  const onDocumentClick = (evt) => {
+    if (evt.target.className.match(/^error$/) || evt.target.className.match(/^success$/)) {
+      onMessageButtonClick();
+    }
+    return undefined;
+  };
+  const onDocumentEscKeydown = (evt) => {
+    if (isEscEvent(evt)) {onMessageButtonClick()}
+    return undefined;
+  };
+
+  newNodeButton.addEventListener('click', onMessageButtonClick, {once: true});
+  document.addEventListener('click', onDocumentClick);
+  document.addEventListener('keydown', onDocumentEscKeydown);
   return undefined;
 };
 
