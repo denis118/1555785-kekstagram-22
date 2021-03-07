@@ -5,7 +5,7 @@ import {
 
 import {
   imageProvider
-} from './thumbnails.js';
+} from './image-provider.js';
 
 const RANDOM_IMG_AMOUNT = 10;
 

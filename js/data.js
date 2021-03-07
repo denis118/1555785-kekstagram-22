@@ -4,10 +4,10 @@ import {
 
 import {
   imageProvider
-} from './thumbnails.js';
+} from './image-provider.js';
 
 import {
-  viewImages
+  imageViewer
 } from './image-viewer.js';
 
 import {
@@ -27,7 +27,7 @@ const getData = () => {
     .then((json) => {
       imageProvider.render(json);
       imageProvider.setEventListeners();
-      viewImages.photoDescriptions = json;
+      imageViewer.photoDescriptions = json;
       imageFilter.showFilters().storeAllData(json).setEventListeners();
       return undefined;
     })

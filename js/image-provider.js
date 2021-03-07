@@ -3,8 +3,7 @@ import {
 } from './utility.js';
 
 import {
-  onPictureClick,
-  onPictureEnterKeydown
+  imageViewer
 } from './image-viewer.js';
 
 const RENDERING_DELAY = 500;
@@ -57,28 +56,28 @@ class ImageProvider {
 
   onPicturesBlockMouseOver (evt) {
     if (evt.target.matches('img[class="picture__img"]')) {
-      evt.target.addEventListener('click', onPictureClick);
+      evt.target.addEventListener('click', imageViewer.onPictureClick);
     }
     return undefined;
   }
 
   onPicturesBlockMouseOut (evt) {
     if (evt.target.matches('img[class="picture__img"]')) {
-      evt.target.removeEventListener('click', onPictureClick);
+      evt.target.removeEventListener('click', imageViewer.onPictureClick);
     }
     return undefined;
   }
 
   onPicturesBlockFocus (evt) {
     if (evt.target.matches('a[class="picture"]')) {
-      evt.target.addEventListener('keydown', onPictureEnterKeydown);
+      evt.target.addEventListener('keydown', imageViewer.onPictureEnterKeydown);
     }
     return undefined;
   }
 
   onPicturesBlockBlur (evt) {
     if (evt.target.matches('a[class="picture"]')) {
-      evt.target.removeEventListener('keydown', onPictureEnterKeydown);
+      evt.target.removeEventListener('keydown', imageViewer.onPictureEnterKeydown);
     }
     return undefined;
   }
