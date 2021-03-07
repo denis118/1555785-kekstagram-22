@@ -1,13 +1,13 @@
-// import {
-//   throttle
-// } from './utility.js';
+import {
+  debounce
+} from './utility.js';
 
 import {
   onPictureClick,
   onPictureEnterKeydown
 } from './image-viewer.js';
 
-// const RENDERING_DELAY = 500;
+const RENDERING_DELAY = 500;
 
 class ImageProvider {
   constructor () {
@@ -19,7 +19,7 @@ class ImageProvider {
     this.onPicturesBlockFocus = this.onPicturesBlockFocus.bind(this);
     this.onPicturesBlockBlur = this.onPicturesBlockBlur.bind(this);
     this.setEventListeners = this.setEventListeners.bind(this);
-    this.render = this.render.bind(this);
+    this.render = debounce(this.render, RENDERING_DELAY);
     this.clean = this.clean.bind(this);
   }
 

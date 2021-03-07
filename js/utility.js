@@ -152,24 +152,39 @@ const showMessage = () => (error, params = {}) => {
 };
 
 const throttle = (func, ms) => {
-  let isThrottled = false;
-  let args = null;
-  let self = null;
-  return function () {
+  let isThrottled = false,
+    savedArgs,
+    savedThis;
+  function wrapper() {
     if (isThrottled) {
-      args = arguments;
-      self = this;
+      savedArgs = arguments;
+      savedThis = this;
       return undefined;
     }
     func.apply(this, arguments);
     isThrottled = true;
-    setTimeout(() => {
+    setTimeout(function() {
       isThrottled = false;
-      func.apply(self, args);
+      if (savedArgs) {
+        wrapper.apply(savedThis, savedArgs);
+        savedArgs = savedThis = null;
+      }
+    }, ms);
+  }
+  return wrapper;
+  // https://learn.javascript.ru/task/throttle
+}
+
+const debounce = (func, ms) => {
+  let timerId = null;
+  return function () {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      func.apply(this, arguments);
     }, ms);
     return undefined;
-  };
-}
+  }
+};
 
 export {
   MAX_COMMENT_LENGTH,
@@ -184,5 +199,6 @@ export {
   markField,
   onTextFieldKeydown,
   showMessage,
-  throttle
+  throttle,
+  debounce
 };

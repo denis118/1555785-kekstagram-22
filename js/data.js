@@ -25,7 +25,8 @@ const getData = () => {
       return response.json();
     })
     .then((json) => {
-      imageProvider.render(json).setEventListeners();
+      imageProvider.render(json);
+      imageProvider.setEventListeners();
       viewImages.photoDescriptions = json;
       imageFilter.showFilters().storeAllData(json).setEventListeners();
       return undefined;
