@@ -3,7 +3,7 @@ import {
 } from './utility.js';
 
 import {
-  renderPictures
+  imageProvider
 } from './thumbnails.js';
 
 import {
@@ -11,7 +11,7 @@ import {
 } from './image-viewer.js';
 
 import {
-  filterImages
+  imageFilter
 } from './image-filter.js';
 
 const onLoadingError = showMessage();
@@ -25,10 +25,9 @@ const getData = () => {
       return response.json();
     })
     .then((json) => {
-      renderPictures(json);
+      imageProvider.render(json).setEventListeners();
       viewImages.photoDescriptions = json;
-      filterImages.stock = json;
-      filterImages.showFilters();
+      imageFilter.showFilters().storeAllData(json).setEventListeners();
       return undefined;
     })
     .catch((error) => onLoadingError(error, {

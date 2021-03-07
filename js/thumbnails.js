@@ -1,68 +1,99 @@
+// import {
+//   throttle
+// } from './utility.js';
+
 import {
   onPictureClick,
   onPictureEnterKeydown
 } from './image-viewer.js';
 
-const picturesBlock = document.querySelector('.pictures');
-const picture = document.querySelector('#picture')
-  .content
-  .querySelector('.picture');
+// const RENDERING_DELAY = 500;
 
-const collectPictures = (photoDescriptions) => {
-  const picturesFragment = document.createDocumentFragment();
-  for (let i = 0; i < photoDescriptions.length; i++) {
-    const newPicture = picture.cloneNode(true);
-    const pictureImg = newPicture.querySelector('.picture__img');
-    const pictureComments = newPicture.querySelector('.picture__comments');
-    const pictureLikes = newPicture.querySelector('.picture__likes');
-
-    pictureImg.src = photoDescriptions[i].url;
-    pictureComments.textContent = photoDescriptions[i].comments.length;
-    pictureLikes.textContent = photoDescriptions[i].likes;
-
-    picturesFragment.appendChild(newPicture);
+class ImageProvider {
+  constructor () {
+    this.picturesBlock = document.querySelector('.pictures');
+    this.picture = document.querySelector('#picture').content.querySelector('.picture');
+    this.collectPictures = this.collectPictures.bind(this);
+    this.onPicturesBlockMouseOver = this.onPicturesBlockMouseOver.bind(this);
+    this.onPicturesBlockMouseOut = this.onPicturesBlockMouseOut.bind(this);
+    this.onPicturesBlockFocus = this.onPicturesBlockFocus.bind(this);
+    this.onPicturesBlockBlur = this.onPicturesBlockBlur.bind(this);
+    this.setEventListeners = this.setEventListeners.bind(this);
+    this.render = this.render.bind(this);
+    this.clean = this.clean.bind(this);
   }
-  return picturesFragment;
-};
 
-const renderPictures = (data) => {
-  picturesBlock.appendChild(collectPictures(data));
-  return undefined;
-};
-
-const onPicturesBlockMouseOver = (evt) => {
-  if (evt.target.matches('img[class="picture__img"]')) {
-    evt.target.addEventListener('click', onPictureClick);
+  collectPictures (data) {
+    this.fragment = document.createDocumentFragment();
+    for (let i = 0; i < data.length; i++) {
+      const newPicture = this.picture.cloneNode(true);
+      const pictureImg = newPicture.querySelector('.picture__img');
+      const pictureComments = newPicture.querySelector('.picture__comments');
+      const pictureLikes = newPicture.querySelector('.picture__likes');
+      pictureImg.src = data[i].url;
+      pictureComments.textContent = data[i].comments.length;
+      pictureLikes.textContent = data[i].likes;
+      this.fragment.appendChild(newPicture);
+    }
+    return this;
   }
-  return undefined;
-};
 
-const onPicturesBlockMouseOut = (evt) => {
-  if (evt.target.matches('img[class="picture__img"]')) {
-    evt.target.removeEventListener('click', onPictureClick);
+  clean () {
+    const pictures = this.picturesBlock.querySelectorAll('.picture');
+    if (pictures) {
+      for (let i = 0; i < pictures.length; i++) {
+        this.picturesBlock.removeChild(pictures[i]);
+      }
+    }
+    return this;
   }
-  return undefined;
-};
 
-const onPicturesBlockFocus = (evt) => {
-  if (evt.target.matches('a[class="picture"]')) {
-    evt.target.addEventListener('keydown', onPictureEnterKeydown);
+  render (data) {
+    this.clean();
+    this.collectPictures(data);
+    this.picturesBlock.appendChild(this.fragment);
+    return this;
   }
-  return undefined;
-};
 
-const onPicturesBlockBlur = (evt) => {
-  if (evt.target.matches('a[class="picture"]')) {
-    evt.target.removeEventListener('keydown', onPictureEnterKeydown);
+  onPicturesBlockMouseOver (evt) {
+    if (evt.target.matches('img[class="picture__img"]')) {
+      evt.target.addEventListener('click', onPictureClick);
+    }
+    return undefined;
   }
-  return undefined;
-};
 
-picturesBlock.addEventListener('mouseover', onPicturesBlockMouseOver);
-picturesBlock.addEventListener('mouseout', onPicturesBlockMouseOut);
-picturesBlock.addEventListener('focus', onPicturesBlockFocus, true);
-picturesBlock.addEventListener('blur', onPicturesBlockBlur, true);
+  onPicturesBlockMouseOut (evt) {
+    if (evt.target.matches('img[class="picture__img"]')) {
+      evt.target.removeEventListener('click', onPictureClick);
+    }
+    return undefined;
+  }
+
+  onPicturesBlockFocus (evt) {
+    if (evt.target.matches('a[class="picture"]')) {
+      evt.target.addEventListener('keydown', onPictureEnterKeydown);
+    }
+    return undefined;
+  }
+
+  onPicturesBlockBlur (evt) {
+    if (evt.target.matches('a[class="picture"]')) {
+      evt.target.removeEventListener('keydown', onPictureEnterKeydown);
+    }
+    return undefined;
+  }
+
+  setEventListeners () {
+    this.picturesBlock.addEventListener('mouseover', this.onPicturesBlockMouseOver);
+    this.picturesBlock.addEventListener('mouseout', this.onPicturesBlockMouseOut);
+    this.picturesBlock.addEventListener('focus', this.onPicturesBlockFocus, true);
+    this.picturesBlock.addEventListener('blur', this.onPicturesBlockBlur, true);
+    return undefined;
+  }
+}
+
+const imageProvider = new ImageProvider();
 
 export {
-  renderPictures
+  imageProvider
 };

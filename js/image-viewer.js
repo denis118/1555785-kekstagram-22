@@ -44,7 +44,10 @@ viewImages.closeBigPicture = function () {
 viewImages.searchMetaData = function (address) {
   const imageSrc = extractPath(address).slice(1);
   const usedData = this.photoDescriptions.find((item) => item.url === imageSrc);
-  this.metaData = Object.create(Object.getPrototypeOf(usedData), Object.getOwnPropertyDescriptors(usedData));
+  this.metaData = Object.create(
+    Object.getPrototypeOf(usedData),
+    Object.getOwnPropertyDescriptors(usedData),
+  );
   return this;
 };
 

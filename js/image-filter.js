@@ -1,29 +1,34 @@
 import {
   getNumber,
-  throttle
+  showMessage
 } from './utility.js';
 
 import {
-  renderPictures
+  imageProvider
 } from './thumbnails.js';
 
-import {
-  viewImages
-} from './image-viewer.js';
-
 const RANDOM_IMG_AMOUNT = 10;
-const RENDERING_DELAY = 500;
 
-class FilterImages {
+const RegEx = {
+  DEFAULT: /^filter-default$/,
+  RANDOM: /^filter-random$/,
+  DISCUSSED: /^filter-discussed$/,
+};
+
+class ImageFilter {
   constructor () {
     this.imgFiltersNode = document.querySelector('.img-filters');
-    this.defaultFilter = this.imgFiltersNode.querySelector('#filter-default');
-    this.randomFilter = this.imgFiltersNode.querySelector('#filter-random');
-    this.discussedFilter = this.imgFiltersNode.querySelector('#filter-discussed');
+    this.imgFiltersForm = this.imgFiltersNode.querySelector('.img-filters__form');
     this.showFilters = this.showFilters.bind(this);
+    this.storeAllFilters = this.storeAllFilters.bind(this);
+    this.storeEachFilter = this.storeEachFilter.bind(this);
+    this.storeActiveFilter = this.storeActiveFilter.bind(this);
+    this.storeActivatingClass = this.storeActivatingClass.bind(this);
     this.getUniqueIndexes = this.getUniqueIndexes.bind(this);
-    this.getRandomImages = this.getRandomImages.bind(this);
-    this.renderImages = throttle(renderPictures, RENDERING_DELAY).bind(this);
+    this.sortByRandom = this.sortByRandom.bind(this);
+    this.sortByDiscussion = this.sortByDiscussion.bind(this);
+    this.storeAllData = this.storeAllData.bind(this);
+    this.onImgFiltersFormClick = this.onImgFiltersFormClick.bind(this);
   }
 
   showFilters () {
@@ -31,9 +36,40 @@ class FilterImages {
     return this;
   }
 
+  storeAllFilters () {
+    this.filters = Array.from(
+      this.imgFiltersNode.querySelectorAll('button[id^="filter"]'),
+    );
+    return this;
+  }
+
+  storeEachFilter () {
+    if (Object.keys(RegEx).length !== this.filters.length) {
+      showMessage()(new Error('Inspect "RegEx" object and ImageFilter.filters'));
+    }
+    const regEntries = Object.entries(RegEx);
+    for (let i = 0; i < regEntries.length; i++) {
+      const key = regEntries[i][0].toLowerCase() + 'Filter';
+      this[key] = this.filters.find(item => item.id.match(regEntries[i][1]));
+    }
+    return this;
+  }
+
+  storeActiveFilter () {
+    this.activeFilter = this.filters.find(item => item.className.includes('active'));
+    return this;
+  }
+
+  storeActivatingClass () {
+    this.activatingClass = this.activeFilter.className
+      .split(' ')
+      .find(item => item.includes('active'));
+    return this;
+  }
+
   getUniqueIndexes () {
     const iSet = new Set();
-    while(iSet.size < RANDOM_IMG_AMOUNT) {
+    while (iSet.size < RANDOM_IMG_AMOUNT) {
       const index = getNumber(0, this.stock.length - 1);
       iSet.add(index);
     }
@@ -41,7 +77,8 @@ class FilterImages {
     return this;
   }
 
-  getRandomImages () {
+  sortByRandom () {
+    this.getUniqueIndexes();
     this.randomImages = [];
     for (let i = 0; i < this.indexes.length; i++) {
       this.randomImages.push(
@@ -55,14 +92,50 @@ class FilterImages {
   }
 
   sortByDiscussion () {
-    this.sortingByDiscussed = [...this.stock]
+    this.discussedImages = [...this.stock]
       .sort((a, b) => a.comments.length < b.comments.length ? 1 : -1);
     return this;
   }
+
+  storeAllData (data) {
+    this.stock = data;
+    this.storeAllFilters()
+      .storeEachFilter()
+      .storeActiveFilter()
+      .storeActivatingClass()
+      .sortByRandom()
+      .sortByDiscussion()
+    return this;
+  }
+
+  onImgFiltersFormClick (evt) {
+    evt.preventDefault();
+    if (evt.target.className.includes('img-filters__button')) {
+      this.activeFilter.classList.remove(this.activatingClass);
+      evt.target.classList.add(this.activatingClass);
+      this.activeFilter = evt.target;
+      if (evt.target.id.match(RegEx.DEFAULT)) {
+        imageProvider.render(this.stock);
+      } else if (evt.target.id.match(RegEx.RANDOM)) {
+        this.sortByRandom();
+        imageProvider.render(this.randomImages);
+      } else if (evt.target.id.match(RegEx.DISCUSSED)) {
+        imageProvider.render(this.discussedImages);
+      } else {
+        throw new Error('evt.target.id mismatch');
+      }
+    }
+    return undefined;
+  }
+
+  setEventListeners () {
+    this.imgFiltersForm.addEventListener('click', this.onImgFiltersFormClick);
+    return undefined;
+  }
 }
 
-const filterImages = new FilterImages();
+const imageFilter = new ImageFilter();
 
 export {
-  filterImages
+  imageFilter
 };
