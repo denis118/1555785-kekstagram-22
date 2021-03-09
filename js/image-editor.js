@@ -3,18 +3,11 @@ import {
 } from './utility.js';
 
 import {
-  // scaleControlSmaller,
-  // scaleControlBigger,
-  // setUserScale,
-  // onScaleControlSmallerClick,
-  // onScaleControlBiggerClick
   Scale
 } from './scale.js';
 
 import {
-  effectsList,
-  onEffectsListClick,
-  radiosArray
+  Effects
 } from './effects.js';
 
 import {
@@ -49,9 +42,10 @@ const uploadCancel = document.querySelector('#upload-cancel');
 const uploadSubmit = document.querySelector('button[id="upload-submit"]');
 
 const scale = new Scale(openedPicture);
+const effects = new Effects(openedPicture);
 
 const resetFormData = () => {
-  radiosArray.find((item) => item.id.match(/.+none$/)).checked = true;
+  effects.radiosArray.find((item) => item.id.match(/.+none$/)).checked = true;
   [resetEffects, clearHashTagsField, comment.clean].forEach(item => item());
   return undefined;
 };
@@ -68,9 +62,7 @@ const onUploadFileChange = (evt) => {
   scale.setUserScale();
   comment.setEventListeners();
   scale.setEventListeners();
-  // scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
-  // scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
-  effectsList.addEventListener('click', onEffectsListClick);
+  effects.setEventListeners();
   uploadCancel.addEventListener('click', onUploadCancelClick);
   imgUploadForm.addEventListener('submit', onImgUploadFormSubmit);
   hashTagsField.addEventListener('input', onHashTagsInput);
@@ -89,9 +81,7 @@ const onUploadCancelClick = (evt) => {
   resetFormData();
   comment.eraseEventListeners();
   scale.eraseEventListeners();
-  // scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
-  // scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
-  effectsList.removeEventListener('click', onEffectsListClick);
+  effects.eraseEventListeners();
   uploadCancel.removeEventListener('click', onUploadCancelClick);
   imgUploadForm.removeEventListener('submit', onImgUploadFormSubmit);
   hashTagsField.removeEventListener('click', onHashTagsInput);
@@ -112,5 +102,6 @@ const onUploadFileEscKeydown = (evt) => {
 uploadFile.addEventListener('change', onUploadFileChange);
 
 export {
-  onUploadCancelClick
+  onUploadCancelClick,
+  openedPicture
 };

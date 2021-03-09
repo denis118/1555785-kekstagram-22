@@ -2,7 +2,7 @@
 
 import {
   openedPicture
-} from './scale.js';
+} from './image-editor.js';
 
 const CHROME_MIN = 0;
 const CHROME_MAX = 1;

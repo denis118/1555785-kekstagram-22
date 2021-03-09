@@ -18,6 +18,8 @@ class Scale {
     this.zoomIn = this.zoomIn.bind(this);
     this.onScaleControlSmallerClick = this.onScaleControlSmallerClick.bind(this);
     this.onScaleControlBiggerClick = this.onScaleControlBiggerClick.bind(this);
+    this.setEventListeners = this.setEventListeners.bind(this);
+    this.eraseEventListeners = this.eraseEventListeners.bind(this);
   }
 
   getPercentages (coefficient = DEFAULT_SCALE_COEFFICIENT) {
