@@ -50,12 +50,14 @@ class Comment {
     this.commentField.addEventListener('input', this.onCommentFieldInput);
     this.commentField.addEventListener('focus', this.onCommentFieldFocus);
     this.commentField.addEventListener('blur', this.onCommentFieldBlur);
+    return undefined;
   }
 
   eraseEventListeners () {
     this.commentField.removeEventListener('input', this.onCommentFieldInput);
     this.commentField.removeEventListener('focus', this.onCommentFieldFocus);
     this.commentField.removeEventListener('blur', this.onCommentFieldBlur);
+    return undefined;
   }
 }
 

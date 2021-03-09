@@ -3,11 +3,12 @@ import {
 } from './utility.js';
 
 import {
-  scaleControlSmaller,
-  scaleControlBigger,
-  setUserScale,
-  onScaleControlSmallerClick,
-  onScaleControlBiggerClick
+  // scaleControlSmaller,
+  // scaleControlBigger,
+  // setUserScale,
+  // onScaleControlSmallerClick,
+  // onScaleControlBiggerClick
+  Scale
 } from './scale.js';
 
 import {
@@ -42,8 +43,12 @@ import {
 const body = document.body;
 const uploadFile = document.querySelector('#upload-file');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
+const imgUploadPreview = document.querySelector('.img-upload__preview');
+const openedPicture = imgUploadPreview.querySelector('img[alt="Предварительный просмотр фотографии"]');
 const uploadCancel = document.querySelector('#upload-cancel');
 const uploadSubmit = document.querySelector('button[id="upload-submit"]');
+
+const scale = new Scale(openedPicture);
 
 const resetFormData = () => {
   radiosArray.find((item) => item.id.match(/.+none$/)).checked = true;
@@ -60,10 +65,11 @@ const onUploadFileChange = (evt) => {
   evt.preventDefault();
   body.classList.add('modal-open');
   imgUploadOverlay.classList.remove('hidden');
-  setUserScale();
+  scale.setUserScale();
   comment.setEventListeners();
-  scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
-  scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
+  scale.setEventListeners();
+  // scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
+  // scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
   effectsList.addEventListener('click', onEffectsListClick);
   uploadCancel.addEventListener('click', onUploadCancelClick);
   imgUploadForm.addEventListener('submit', onImgUploadFormSubmit);
@@ -82,8 +88,9 @@ const onUploadCancelClick = (evt) => {
   imgUploadOverlay.classList.add('hidden');
   resetFormData();
   comment.eraseEventListeners();
-  scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
-  scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
+  scale.eraseEventListeners();
+  // scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
+  // scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
   effectsList.removeEventListener('click', onEffectsListClick);
   uploadCancel.removeEventListener('click', onUploadCancelClick);
   imgUploadForm.removeEventListener('submit', onImgUploadFormSubmit);
