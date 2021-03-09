@@ -1,5 +1,6 @@
 import {
-  showMessage
+  // showMessage
+  util
 } from './utility.js';
 
 import {
@@ -14,7 +15,7 @@ import {
   imageFilter
 } from './image-filter.js';
 
-const onLoadingError = showMessage();
+const onLoadingError = util.showMessage();
 
 const getData = () => {
   fetch('https://22.javascript.pages.academy/kekstagram/data')

@@ -1,5 +1,6 @@
 import {
-  showMessage
+  // showMessage
+  util
 } from './utility.js';
 
 import {
@@ -7,8 +8,8 @@ import {
 } from './image-editor.js';
 
 const imgUploadForm = document.querySelector('#upload-select-image');
-const onSuccess = showMessage();
-const onError = showMessage();
+const onSuccess = util.showMessage();
+const onError = util.showMessage();
 
 const onImgUploadFormSubmit = (evt) => {
   evt.preventDefault();

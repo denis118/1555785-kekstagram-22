@@ -1,5 +1,6 @@
 import {
-  isEscEvent
+  // isEscEvent
+  util
 } from './utility.js';
 
 import {
@@ -104,7 +105,7 @@ const onUploadCancelClick = (evt) => {
 };
 
 const onUploadFileEscKeydown = (evt) => {
-  if (isEscEvent(evt)) {
+  if (util.isEscEvent(evt)) {
     onUploadCancelClick(evt);
   }
   return undefined;

@@ -1,7 +1,8 @@
 import {
-  isEscEvent,
-  isEnterEvent,
-  extractPath
+  // isEscEvent,
+  // isEnterEvent,
+  // extractPath
+  util
 } from './utility.js';
 
 const AVATAR_WIDTH = 35;
@@ -28,10 +29,12 @@ class ImageViewer {
     this.createCommentsFragment = this.createCommentsFragment.bind(this);
     this.clearSocialComments = this.clearSocialComments.bind(this);
     this.hideExtraComments = this.hideExtraComments.bind(this);
+    this.seeMoreComments = this.seeMoreComments.bind(this);
     this.onPictureClose = this.onPictureClose.bind(this);
     this.onPopupEscKeydown = this.onPopupEscKeydown.bind(this);
     this.onPictureClick = this.onPictureClick.bind(this);
     this.onPictureEnterKeydown = this.onPictureEnterKeydown.bind(this);
+    this.onSocialCommentsLoaderClick = this.onSocialCommentsLoaderClick.bind(this);
   }
 
   openBigPicture () {
@@ -51,7 +54,7 @@ class ImageViewer {
   }
 
   searchMetaData (address) {
-    const imageSrc = extractPath(address).slice(1);
+    const imageSrc = util.extractPath(address).slice(1);
     const usedData = this.photoDescriptions.find((item) => item.url === imageSrc);
     this.metaData = Object.create(
       Object.getPrototypeOf(usedData),
@@ -105,10 +108,37 @@ class ImageViewer {
   }
 
   hideExtraComments () {
+    this.hiddenCommentsQueue = [];
     if (this.socialComments.children.length > DISPLAYED_COMMENTS_AMOUNT) {
       for (let i = this.socialComments.children.length - 1; i >= DISPLAYED_COMMENTS_AMOUNT; i--) {
         this.socialComments.children[i].classList.add('hidden');
+        this.hiddenCommentsQueue.push(this.socialComments.children[i]);
       }
+    }
+    if (this.hiddenCommentsQueue.length) {
+      this.socialCommentsLoader.classList.remove('hidden');
+    }
+    return this;
+  }
+
+  seeMoreComments () {
+    let startIndex;
+    let elementsToDisplay;
+    if (!this.hiddenCommentsQueue.length) {return undefined}
+    if (this.hiddenCommentsQueue.length < DISPLAYED_COMMENTS_AMOUNT) {
+      startIndex = 0;
+      elementsToDisplay = this.hiddenCommentsQueue
+        .splice(startIndex, this.hiddenCommentsQueue.length);
+    } else {
+      startIndex = - DISPLAYED_COMMENTS_AMOUNT;
+      elementsToDisplay = this.hiddenCommentsQueue
+        .splice(startIndex, DISPLAYED_COMMENTS_AMOUNT);
+    }
+    for (let i = elementsToDisplay.length - 1; i >= 0; i--) {
+      elementsToDisplay[i].classList.remove('hidden');
+    }
+    if (!this.hiddenCommentsQueue.length) {
+      this.socialCommentsLoader.classList.add('hidden');
     }
     return this;
   }
@@ -117,12 +147,13 @@ class ImageViewer {
     evt.preventDefault();
     this.closeBigPicture();
     this.bigPictureCancel.removeEventListener('click', this.onPictureClose);
+    this.socialCommentsLoader.removeEventListener('click', this.onSocialCommentsLoaderClick);
     document.removeEventListener('keydown', this.onPopupEscKeydown);
     return undefined;
   }
 
   onPopupEscKeydown (evt) {
-    if (isEscEvent(evt)) {
+    if (util.isEscEvent(evt)) {
       this.onPictureClose(evt);
     }
     return undefined;
@@ -139,17 +170,23 @@ class ImageViewer {
       this.socialComments.appendChild(this.commentsFragment);
       this.hideExtraComments()
       this.bigPictureCancel.addEventListener('click', this.onPictureClose);
+      this.socialCommentsLoader.addEventListener('click', this.onSocialCommentsLoaderClick);
       document.addEventListener('keydown', this.onPopupEscKeydown);
     }
     return undefined;
   }
 
   onPictureEnterKeydown (evt) {
-    if (isEnterEvent(evt)) {
+    if (util.isEnterEvent(evt)) {
       evt.preventDefault();
       this.onPictureClick(evt);
     }
     return undefined;
+  }
+
+  onSocialCommentsLoaderClick (evt) {
+    evt.preventDefault();
+    this.seeMoreComments();
   }
 }
 

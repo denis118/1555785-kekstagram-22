@@ -1,11 +1,13 @@
 import {
-  MAX_COMMENT_LENGTH,
-  markField,
-  onTextFieldKeydown
+  // markField,
+  // onTextFieldKeydown
+  util
 } from './utility.js';
 
+const MAX_COMMENT_LENGTH = 140;
+
 const commentsField = document.querySelector('textarea[name="description"]');
-const changeOutlineStyle = markField(commentsField);
+const changeOutlineStyle = util.markField(commentsField);
 
 const onCommentsFieldInput = () => {
   const valueLength = commentsField.value.length;
@@ -23,13 +25,13 @@ const onCommentsFieldInput = () => {
 
 const onCommentsFocus = (evt) => {
   evt.preventDefault();
-  commentsField.addEventListener('keydown', onTextFieldKeydown);
+  commentsField.addEventListener('keydown', util.onTextFieldKeydown);
   return undefined;
 };
 
 const onCommentsBlur = (evt) => {
   evt.preventDefault();
-  commentsField.removeEventListener('keydown', onTextFieldKeydown);
+  commentsField.removeEventListener('keydown', util.onTextFieldKeydown);
   return undefined;
 };
 
