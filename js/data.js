@@ -3,12 +3,16 @@ import {
 } from './utility.js';
 
 import {
-  renderPictures
-} from './thumbnails.js';
+  imageProvider
+} from './image-provider.js';
 
 import {
-  viewImage
+  imageViewer
 } from './image-viewer.js';
+
+import {
+  imageFilter
+} from './image-filter.js';
 
 const onLoadingError = showMessage();
 
@@ -21,8 +25,10 @@ const getData = () => {
       return response.json();
     })
     .then((json) => {
-      renderPictures(json);
-      viewImage.photoDescriptions = json;
+      imageProvider.render(json);
+      imageProvider.setEventListeners();
+      imageViewer.photoDescriptions = json;
+      imageFilter.showFilters().storeAllData(json).setEventListeners();
       return undefined;
     })
     .catch((error) => onLoadingError(error, {

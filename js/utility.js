@@ -151,6 +151,41 @@ const showMessage = () => (error, params = {}) => {
   return undefined;
 };
 
+const throttle = (func, ms) => {
+  let isThrottled = false,
+    savedArgs,
+    savedThis;
+  function wrapper() {
+    if (isThrottled) {
+      savedArgs = arguments;
+      savedThis = this;
+      return undefined;
+    }
+    func.apply(this, arguments);
+    isThrottled = true;
+    setTimeout(function() {
+      isThrottled = false;
+      if (savedArgs) {
+        wrapper.apply(savedThis, savedArgs);
+        savedArgs = savedThis = null;
+      }
+    }, ms);
+  }
+  return wrapper;
+  // https://learn.javascript.ru/task/throttle
+}
+
+const debounce = (func, ms) => {
+  let timerId = null;
+  return function () {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      func.apply(this, arguments);
+    }, ms);
+    return undefined;
+  }
+};
+
 export {
   MAX_COMMENT_LENGTH,
   getNumber,
@@ -163,5 +198,7 @@ export {
   extractPath,
   markField,
   onTextFieldKeydown,
-  showMessage
+  showMessage,
+  throttle,
+  debounce
 };
