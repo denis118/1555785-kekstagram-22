@@ -1,7 +1,4 @@
 import {
-  // validateStringLength,
-  // markField,
-  // onTextFieldKeydown
   util
 } from './utility.js';
 

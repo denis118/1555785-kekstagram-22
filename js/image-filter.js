@@ -1,6 +1,4 @@
 import {
-  // getNumber,
-  // showMessage
   util
 } from './utility.js';
 

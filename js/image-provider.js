@@ -1,5 +1,4 @@
 import {
-  // debounce
   util
 } from './utility.js';
 

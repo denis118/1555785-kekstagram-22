@@ -1,7 +1,4 @@
 import {
-  // isEscEvent,
-  // isEnterEvent,
-  // extractPath
   util
 } from './utility.js';
 
