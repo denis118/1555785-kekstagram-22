@@ -26,83 +26,6 @@ import {
   comment
 } from './comment.js';
 
-// import {
-//   imgUploadForm,
-//   onImgUploadFormSubmit
-// } from './form-submission.js';
-
-// const body = document.body;
-// const uploadFile = document.querySelector('#upload-file');
-// const imgUploadOverlay = document.querySelector('.img-upload__overlay');
-// const imgUploadPreview = document.querySelector('.img-upload__preview');
-// const openedPicture = imgUploadPreview.querySelector('img[alt="Предварительный просмотр фотографии"]');
-// const uploadCancel = document.querySelector('#upload-cancel');
-// const uploadSubmit = document.querySelector('button[id="upload-submit"]');
-
-// const scale = new Scale(openedPicture);
-// const slider = new Slider(openedPicture).buildEffectsOptions();
-// const effects = new Effects(openedPicture, slider.switch, Slider.emulateClassName);
-
-// const resetFormData = () => {
-//   effects.radiosArray.find((item) => item.id.match(/.+none$/)).checked = true;
-//   [slider.processNoneCase, hashtags.clean, comment.clean].forEach(item => item());
-//   return undefined;
-// };
-
-// const onUploadSubmitClick = (evt) => {
-//   if (hashtags.searchSingleHash() || hashtags.checkInvalidHashTags()) {evt.preventDefault()}
-//   return undefined;
-// };
-
-// const onUploadFileChange = (evt) => {
-//   evt.preventDefault();
-//   body.classList.add('modal-open');
-//   imgUploadOverlay.classList.remove('hidden');
-//   scale.setUserScale();
-//   comment.setEventListeners();
-//   scale.setEventListeners();
-//   effects.setEventListeners();
-//   hashtags.setEventListeners();
-//   uploadCancel.addEventListener('click', onUploadCancelClick);
-//   imgUploadForm.addEventListener('submit', onImgUploadFormSubmit);
-//   uploadSubmit.addEventListener('click', onUploadSubmitClick);
-//   document.addEventListener('keydown', onUploadFileEscKeydown);
-//   return undefined;
-// };
-
-// const onUploadCancelClick = (evt) => {
-//   evt.preventDefault();
-//   uploadFile.value = '';
-//   body.classList.remove('modal-open');
-//   imgUploadOverlay.classList.add('hidden');
-//   resetFormData();
-//   comment.eraseEventListeners();
-//   scale.eraseEventListeners();
-//   effects.eraseEventListeners();
-//   hashtags.eraseEventListeners();
-//   uploadCancel.removeEventListener('click', onUploadCancelClick);
-//   imgUploadForm.removeEventListener('submit', onImgUploadFormSubmit);
-//   uploadSubmit.removeEventListener('click', onUploadSubmitClick);
-//   document.removeEventListener('keydown', onUploadFileEscKeydown);
-//   return undefined;
-// };
-
-// const onUploadFileEscKeydown = (evt) => {
-//   if (Utility.isEscEvent(evt)) {
-//     onUploadCancelClick(evt);
-//   }
-//   return undefined;
-// };
-
-// uploadFile.addEventListener('change', onUploadFileChange);
-
-// export {
-//   onUploadCancelClick,
-//   openedPicture
-// };
-
-//--------------------------------------------------------------------------
-
 class ImageEditor {
   constructor () {
     this.body = document.body;
@@ -146,7 +69,6 @@ class ImageEditor {
     comment.setEventListeners();
     hashtags.setEventListeners();
     this.uploadCancel.addEventListener('click', this.onUploadCancelClick);
-    // imgUploadForm.addEventListener('submit', onImgUploadFormSubmit);
     this.uploadSubmit.addEventListener('click', this.onUploadSubmitClick);
     document.addEventListener('keydown', this.onUploadFileEscKeydown);
     return undefined;
@@ -164,7 +86,6 @@ class ImageEditor {
     comment.eraseEventListeners();
     hashtags.eraseEventListeners();
     this.uploadCancel.removeEventListener('click', this.onUploadCancelClick);
-    // imgUploadForm.removeEventListener('submit', onImgUploadFormSubmit);
     this.uploadSubmit.removeEventListener('click', this.onUploadSubmitClick);
     document.removeEventListener('keydown', this.onUploadFileEscKeydown);
     return undefined;
