@@ -15,13 +15,14 @@ import {
 } from './slider.js';
 
 import {
-  hashTagsField,
-  checkInvalidHashTags,
-  onHashTagsInput,
-  searchSingleHash,
-  onHashTagsFocus,
-  onHashTagsBlur,
-  clearHashTagsField
+  // hashTagsField,
+  // checkInvalidHashTags,
+  // onHashTagsInput,
+  // searchSingleHash,
+  // onHashTagsFocus,
+  // onHashTagsBlur,
+  // clearHashTagsField
+  hashtags
 } from './hashtags.js';
 
 import {
@@ -47,12 +48,12 @@ const effects = new Effects(openedPicture, slider.switch, Slider.emulateClassNam
 
 const resetFormData = () => {
   effects.radiosArray.find((item) => item.id.match(/.+none$/)).checked = true;
-  [slider.processNoneCase, clearHashTagsField, comment.clean].forEach(item => item());
+  [slider.processNoneCase, hashtags.clean, comment.clean].forEach(item => item());
   return undefined;
 };
 
 const onUploadSubmitClick = (evt) => {
-  if (searchSingleHash() || checkInvalidHashTags()) {evt.preventDefault()}
+  if (hashtags.searchSingleHash() || hashtags.checkInvalidHashTags()) {evt.preventDefault()}
   return undefined;
 };
 
@@ -64,11 +65,12 @@ const onUploadFileChange = (evt) => {
   comment.setEventListeners();
   scale.setEventListeners();
   effects.setEventListeners();
+  hashtags.setEventListeners();
   uploadCancel.addEventListener('click', onUploadCancelClick);
   imgUploadForm.addEventListener('submit', onImgUploadFormSubmit);
-  hashTagsField.addEventListener('input', onHashTagsInput);
-  hashTagsField.addEventListener('focus', onHashTagsFocus);
-  hashTagsField.addEventListener('blur', onHashTagsBlur);
+  // hashTagsField.addEventListener('input', onHashTagsInput);
+  // hashTagsField.addEventListener('focus', onHashTagsFocus);
+  // hashTagsField.addEventListener('blur', onHashTagsBlur);
   uploadSubmit.addEventListener('click', onUploadSubmitClick);
   document.addEventListener('keydown', onUploadFileEscKeydown);
   return undefined;
@@ -83,11 +85,12 @@ const onUploadCancelClick = (evt) => {
   comment.eraseEventListeners();
   scale.eraseEventListeners();
   effects.eraseEventListeners();
+  hashtags.eraseEventListeners();
   uploadCancel.removeEventListener('click', onUploadCancelClick);
   imgUploadForm.removeEventListener('submit', onImgUploadFormSubmit);
-  hashTagsField.removeEventListener('click', onHashTagsInput);
-  hashTagsField.removeEventListener('focus', onHashTagsFocus);
-  hashTagsField.removeEventListener('blur', onHashTagsBlur);
+  // hashTagsField.removeEventListener('click', onHashTagsInput);
+  // hashTagsField.removeEventListener('focus', onHashTagsFocus);
+  // hashTagsField.removeEventListener('blur', onHashTagsBlur);
   uploadSubmit.removeEventListener('click', onUploadSubmitClick);
   document.removeEventListener('keydown', onUploadFileEscKeydown);
   return undefined;
