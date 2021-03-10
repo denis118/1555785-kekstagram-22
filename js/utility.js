@@ -1,17 +1,5 @@
 class Utility {
-  constructor () {
-    this.getNumber = this.getNumber.bind(this);
-    this.validateStringLength = this.validateStringLength.bind(this);
-    this.isEscEvent = this.isEscEvent.bind(this);
-    this.isEnterEvent = this.isEnterEvent.bind(this);
-    this.extractPath = this.extractPath.bind(this);
-    this.markField = this.markField.bind(this);
-    this.onTextFieldKeydown = this.onTextFieldKeydown.bind(this);
-    this.showMessage = this.showMessage.bind(this);
-    this.debounce = this.debounce.bind(this);
-  }
-
-  getNumber (lowerLimit, upperLimit) {
+  static getNumber (lowerLimit, upperLimit) {
     if (lowerLimit < 0 || upperLimit < 0) {
       return new Error('Аргумент может быть только положительным числом, включая ноль');
     }
@@ -24,7 +12,7 @@ class Utility {
     // https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
   }
 
-  validateStringLength (stringToCheck, maxLength) {
+  static validateStringLength (stringToCheck, maxLength) {
     if (typeof stringToCheck !== 'string') {
       return new Error('Первый аргумент функции должен иметь тип "string"');
     }
@@ -34,19 +22,19 @@ class Utility {
     return (stringToCheck.length <= maxLength) ? true : false;
   }
 
-  isEscEvent (evt) {
+  static isEscEvent (evt) {
     return evt.key === ('Escape' || 'Esc');
   }
 
-  isEnterEvent (evt) {
+  static isEnterEvent (evt) {
     return evt.key === 'Enter';
   }
 
-  extractPath (string) {
+  static extractPath (string) {
     return new URL(string).pathname;
   }
 
-  markField (element) {
+  static markField (element) {
     const currentOutlineStyle = element.style.outline;
     const changeOutlineStyle = (outlineStyle) => {
       if (outlineStyle) {
@@ -60,8 +48,8 @@ class Utility {
     return changeOutlineStyle;
   }
 
-  onTextFieldKeydown (evt) {
-    if (this.isEscEvent) {evt.stopPropagation()}
+  static onTextFieldKeydown (evt) {
+    if (Utility.isEscEvent) {evt.stopPropagation()}
   }
 
   static cloneErrorNode () {
@@ -84,7 +72,7 @@ class Utility {
     return [newSuccess, successTitle, successButton];
   }
 
-  showMessage () {
+  static showMessage () {
     return function (error, params = {}) {
       const main = document.querySelector('main');
       const fragment = document.createDocumentFragment();
@@ -129,7 +117,7 @@ class Utility {
         return undefined;
       };
       const onDocumentEscKeydown = (evt) => {
-        if (this.isEscEvent(evt)) {onMessageButtonClick()}
+        if (Utility.isEscEvent(evt)) {onMessageButtonClick()}
         return undefined;
       };
 
@@ -140,7 +128,7 @@ class Utility {
     }
   }
 
-  debounce (func, ms) {
+  static debounce (func, ms) {
     let timerId = null;
     return function () {
       clearTimeout(timerId);
@@ -152,8 +140,6 @@ class Utility {
   }
 }
 
-const util = new Utility();
-
 export {
-  util
+  Utility
 };

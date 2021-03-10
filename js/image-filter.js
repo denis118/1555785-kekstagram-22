@@ -1,5 +1,5 @@
 import {
-  util
+  Utility
 } from './utility.js';
 
 import {
@@ -44,7 +44,7 @@ class ImageFilter {
 
   storeEachFilter () {
     if (Object.keys(RegEx).length !== this.filters.length) {
-      util.showMessage()(new Error('Inspect "RegEx" object and ImageFilter.filters'));
+      Utility.showMessage()(new Error('Inspect "RegEx" object and ImageFilter.filters'));
     }
     const regEntries = Object.entries(RegEx);
     for (let i = 0; i < regEntries.length; i++) {
@@ -69,7 +69,7 @@ class ImageFilter {
   getUniqueIndexes () {
     const iSet = new Set();
     while (iSet.size < RANDOM_IMG_AMOUNT) {
-      const index = util.getNumber(0, this.stock.length - 1);
+      const index = Utility.getNumber(0, this.stock.length - 1);
       iSet.add(index);
     }
     this.indexes = Array.from(iSet);

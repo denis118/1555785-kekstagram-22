@@ -1,5 +1,5 @@
 import {
-  util
+  Utility
 } from './utility.js';
 
 import {
@@ -19,7 +19,7 @@ const URL_FOR_RECEIVING = 'https://22.javascript.pages.academy/kekstagram/data';
 
 class Data {
   constructor () {
-    this.onLoadingError = util.showMessage().bind(this);
+    this.onLoadingError = Utility.showMessage().bind(this);
     this.receive = this.receive.bind(this);
     // this.send = this.send.bind(this);
   }

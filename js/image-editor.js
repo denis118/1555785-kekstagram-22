@@ -1,5 +1,5 @@
 import {
-  util
+  Utility
 } from './utility.js';
 
 import {
@@ -11,7 +11,7 @@ import {
 } from './effects.js';
 
 import {
-  processNoneCase as resetEffects
+  Slider
 } from './slider.js';
 
 import {
@@ -42,11 +42,12 @@ const uploadCancel = document.querySelector('#upload-cancel');
 const uploadSubmit = document.querySelector('button[id="upload-submit"]');
 
 const scale = new Scale(openedPicture);
-const effects = new Effects(openedPicture);
+const slider = new Slider(openedPicture).buildEffectsOptions();
+const effects = new Effects(openedPicture, slider.switch, Slider.emulateClassName);
 
 const resetFormData = () => {
   effects.radiosArray.find((item) => item.id.match(/.+none$/)).checked = true;
-  [resetEffects, clearHashTagsField, comment.clean].forEach(item => item());
+  [slider.processNoneCase, clearHashTagsField, comment.clean].forEach(item => item());
   return undefined;
 };
 
@@ -93,7 +94,7 @@ const onUploadCancelClick = (evt) => {
 };
 
 const onUploadFileEscKeydown = (evt) => {
-  if (util.isEscEvent(evt)) {
+  if (Utility.isEscEvent(evt)) {
     onUploadCancelClick(evt);
   }
   return undefined;

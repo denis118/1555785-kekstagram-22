@@ -1,9 +1,5 @@
 /* global noUiSlider:readonly */
 
-import {
-  openedPicture
-} from './image-editor.js';
-
 const CHROME_MIN = 0;
 const CHROME_MAX = 1;
 const CHROME_STEP = 0.1;
@@ -24,123 +20,154 @@ const HEAT_MIN = 1;
 const HEAT_MAX = 3;
 const HEAT_STEP = 0.1;
 
-const getSliderElement = () => document.querySelector('.effect-level__slider');
-const getEffectLevelElement = () => document.querySelector('.effect-level__value');
+class Slider {
+  constructor (openedPicture) {
+    this.openedPicture = openedPicture;
+    this.sliderElement = document.querySelector('.effect-level__slider');
+    this.effectLevelElement = document.querySelector('.effect-level__value');
+    this.setEffectsSettings = this.setEffectsSettings.bind(this);
+    this.buildEffectsOptions = this.buildEffectsOptions.bind(this);
+    this.startChromeCase = this.startChromeCase.bind(this);
+    this.startSepiaCase = this.startSepiaCase.bind(this);
+    this.startMarvinCase = this.startMarvinCase.bind(this);
+    this.startPhobosCase = this.startPhobosCase.bind(this);
+    this.startHeatCase = this.startHeatCase.bind(this);
+    this.processNoneCase = this.processNoneCase.bind(this);
+    this.processStandartCase = this.processStandartCase.bind(this);
+    this.runEffectChangingCase = this.runEffectChangingCase.bind(this);
+    this.switch = this.switch.bind(this);
+  }
 
-const getChromeSet = () => ({range: {min: CHROME_MIN, max: CHROME_MAX}, start: CHROME_MAX, step: CHROME_STEP});
-const getSepiaSet = () => ({range: {min: SEPIA_MIN, max: SEPIA_MAX}, start: SEPIA_MAX, step: SEPIA_STEP});
-const getMarvinSet = () => ({range: {min: MARVIN_MIN, max: MARVIN_MAX}, start: MARVIN_MAX, step: MARVIN_STEP});
-const getPhobosSet = () => ({range: {min: PHOBOS_MIN, max: PHOBOS_MAX}, start: PHOBOS_MAX, step: PHOBOS_STEP});
-const getHeatSet = () => ({range: {min: HEAT_MIN, max: HEAT_MAX}, start: HEAT_MAX, step: HEAT_STEP});
-const getAdds = () => ({
-  connect: 'lower',
-  format: {
-    to: value => Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1),
-    from: value => parseFloat(value),
-  },
-});
+  setEffectsSettings () {
+    this.chromeSet = {range: {min: CHROME_MIN, max: CHROME_MAX}, start: CHROME_MAX, step: CHROME_STEP};
+    this.sepiaSet = {range: {min: SEPIA_MIN, max: SEPIA_MAX}, start: SEPIA_MAX, step: SEPIA_STEP};
+    this.marvinSet = {range: {min: MARVIN_MIN, max: MARVIN_MAX}, start: MARVIN_MAX, step: MARVIN_STEP};
+    this.phobosSet = {range: {min: PHOBOS_MIN, max: PHOBOS_MAX}, start: PHOBOS_MAX, step: PHOBOS_STEP};
+    this.heatSet = {range: {min: HEAT_MIN, max: HEAT_MAX}, start: HEAT_MAX, step: HEAT_STEP};
+    this.adds = {
+      connect: 'lower',
+      format: {
+        to: value => Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1),
+        from: value => parseFloat(value),
+      },
+    };
+    return this;
+  }
 
-const buildChromeOptions = () => Object.assign({}, getChromeSet(), getAdds());
-const buildSepiaOptions = () => Object.assign({}, getSepiaSet(), getAdds());
-const buildMarvinOptions = () => Object.assign({}, getMarvinSet(), getAdds());
-const buildPhobosOptions = () => Object.assign({}, getPhobosSet(), getAdds());
-const buildHeatOptions = () => Object.assign({}, getHeatSet(), getAdds());
+  buildEffectsOptions () {
+    this.setEffectsSettings();
+    this.chromeBuild = Object.assign({}, this.chromeSet, this.adds);
+    this.sepiaBuild = Object.assign({}, this.sepiaSet, this.adds);
+    this.marvinBuild = Object.assign({}, this.marvinSet, this.adds);
+    this.phobosBuild = Object.assign({}, this.phobosSet, this.adds);
+    this.heatBuild = Object.assign({}, this.heatSet, this.adds);
+    return this;
+  }
 
-const setChromeStartValue = () => getEffectLevelElement().value = CHROME_MAX;
-const setSepiaStartValue = () => getEffectLevelElement().value = SEPIA_MAX;
-const setMarvinStartValue = () => getEffectLevelElement().value = MARVIN_MAX;
-const setPhobosStartValue = () => getEffectLevelElement().value = PHOBOS_MAX;
-const setHeatStartValue = () => getEffectLevelElement().value = HEAT_MAX;
+  startChromeCase () {
+    noUiSlider.create(this.sliderElement, this.chromeBuild);
+    this.effectLevelElement.value = CHROME_MAX;
+    this.effectLevelElement.setAttribute('step', CHROME_STEP);
+    return this;
+  }
 
-const setChromeFilterValue = value => openedPicture.style.filter = `grayscale(${value})`;
-const setSepiaFilterValue = value => openedPicture.style.filter = `sepia(${value})`;
-const setMarvinFilterValue = value => openedPicture.style.filter = `invert(${value}%)`;
-const setPhobosFilterValue = value => openedPicture.style.filter = `blur(${value}px)`;
-const setHeatFilterValue = value => openedPicture.style.filter = `brightness(${value})`;
+  startSepiaCase () {
+    noUiSlider.create(this.sliderElement, this.sepiaBuild);
+    this.effectLevelElement.value = SEPIA_MAX;
+    this.effectLevelElement.setAttribute('step', SEPIA_STEP);
+    return this;
+  }
 
-const setEffectCurrentValue = value => getEffectLevelElement().value = value;
+  startMarvinCase () {
+    noUiSlider.create(this.sliderElement, this.marvinBuild);
+    this.effectLevelElement.value = MARVIN_MAX;
+    this.effectLevelElement.setAttribute('step', MARVIN_STEP);
+    return this;
+  }
 
-const setChromeStep = (step = CHROME_STEP) => getEffectLevelElement().setAttribute('step', step);
-const setSepiaStep = (step = SEPIA_STEP) => getEffectLevelElement().setAttribute('step', step);
-const setMarvinStep = (step = MARVIN_STEP) => getEffectLevelElement().setAttribute('step', step);
-const setPhobosStep = (step = PHOBOS_STEP) => getEffectLevelElement().setAttribute('step', step);
-const setHeatStep = (step = HEAT_STEP) => getEffectLevelElement().setAttribute('step', step);
+  startPhobosCase () {
+    noUiSlider.create(this.sliderElement, this.phobosBuild);
+    this.effectLevelElement.value = PHOBOS_MAX;
+    this.effectLevelElement.setAttribute('step', PHOBOS_STEP);
+    return this;
+  }
 
-const emulateClassName = (evt) =>
-  evt.target.getAttribute('for').match(/.+none$/) ? '--none' :
-    evt.target.getAttribute('for').match(/.+chrome$/) ? '--chrome' :
-      evt.target.getAttribute('for').match(/.+sepia$/) ? '--sepia' :
-        evt.target.getAttribute('for').match(/.+marvin$/) ? '--marvin' :
-          evt.target.getAttribute('for').match(/.+phobos$/) ? '--phobos' :
-            evt.target.getAttribute('for').match(/.+heat$/) ? '--heat' :
+  startHeatCase () {
+    noUiSlider.create(this.sliderElement, this.heatBuild);
+    this.effectLevelElement.value = HEAT_MAX;
+    this.effectLevelElement.setAttribute('step', HEAT_STEP);
+    return this;
+  }
+
+  processNoneCase () {
+    if (!this.sliderElement.noUiSlider) {
+      return this;
+    } else {
+      if (this.openedPicture.style.filter) {
+        this.openedPicture.style.filter = '';
+      }
+      if (this.openedPicture.getAttribute('class')) {
+        this.openedPicture.removeAttribute('class');
+      }
+      this.sliderElement.noUiSlider.off('update');
+      this.sliderElement.noUiSlider.destroy();
+      this.effectLevelElement.value = '';
+    }
+    if (this.effectLevelElement.getAttribute('step')) {
+      this.effectLevelElement.removeAttribute('step');
+    }
+    return this;
+  }
+
+  processStandartCase () {
+    this.sliderElement.noUiSlider.destroy();
+    return this;
+  }
+
+  runEffectChangingCase (evt, value) {
+    const filterValue = evt.target.className.match(/.+chrome$/) ? `grayscale(${value})` :
+      evt.target.className.match(/.+sepia$/) ? `sepia(${value})` :
+        evt.target.className.match(/.+marvin$/) ? `invert(${value}%)` :
+          evt.target.className.match(/.+phobos$/) ? `blur(${value}px)` :
+            evt.target.className.match(/.+heat$/) ? `brightness(${value})` :
               null;
-
-const processNoneCase = () => {
-  const sliderElement = getSliderElement();
-  const effectLevelElement = getEffectLevelElement();
-  if (!sliderElement.noUiSlider) {
-    return undefined;
-  } else {
-    if (openedPicture.getAttribute('style')) {
-      openedPicture.removeAttribute('style');
+    if (filterValue === null) {
+      throw new Error('filter value is null');
     }
-    if (openedPicture.getAttribute('class')) {
-      openedPicture.removeAttribute('class');
-    }
-    sliderElement.noUiSlider.off('update');
-    sliderElement.noUiSlider.destroy();
-    getEffectLevelElement().value = '';
+    this.openedPicture.style.filter = filterValue;
+    this.effectLevelElement.value = value;
+    return this;
   }
-  if (effectLevelElement.getAttribute('step')) {
-    effectLevelElement.removeAttribute('step');
+
+  static emulateClassName (evt) {
+    return evt.target.getAttribute('for').match(/.+none$/) ? '--none' :
+      evt.target.getAttribute('for').match(/.+chrome$/) ? '--chrome' :
+        evt.target.getAttribute('for').match(/.+sepia$/) ? '--sepia' :
+          evt.target.getAttribute('for').match(/.+marvin$/) ? '--marvin' :
+            evt.target.getAttribute('for').match(/.+phobos$/) ? '--phobos' :
+              evt.target.getAttribute('for').match(/.+heat$/) ? '--heat' :
+                null;
   }
-  return undefined;
-};
 
-const processStandartCase = () => getSliderElement().noUiSlider.destroy();
-
-const createChromeSlider = () => noUiSlider.create(getSliderElement(), buildChromeOptions());
-const createSepiaSlider = () => noUiSlider.create(getSliderElement(), buildSepiaOptions());
-const creatMarvinSlider = () => noUiSlider.create(getSliderElement(), buildMarvinOptions());
-const createPhobosSlider = () => noUiSlider.create(getSliderElement(), buildPhobosOptions());
-const createHeatSlider = () => noUiSlider.create(getSliderElement(), buildHeatOptions());
-
-const startChromeCase = () => [createChromeSlider, setChromeStartValue, setChromeStep].forEach(item => item());
-const startSepiaCase = () => [createSepiaSlider, setSepiaStartValue, setSepiaStep].forEach(item => item());
-const startMarvinCase = () => [creatMarvinSlider, setMarvinStartValue, setMarvinStep].forEach(item => item());
-const startPhobosCase = () => [createPhobosSlider, setPhobosStartValue, setPhobosStep].forEach(item => item());
-const startHeatCase = () => [createHeatSlider, setHeatStartValue, setHeatStep].forEach(item => item());
-
-const runChromeChangingCase = value => [setChromeFilterValue, setEffectCurrentValue].forEach(item => item(value));
-const runSepiaChangingCase = value => [setSepiaFilterValue, setEffectCurrentValue].forEach(item => item(value));
-const runMarvinChangingCase = value => [setMarvinFilterValue, setEffectCurrentValue].forEach(item => item(value));
-const runPhobosChangingCase = value => [setPhobosFilterValue, setEffectCurrentValue].forEach(item => item(value));
-const runHeatChangingCase = value => [setHeatFilterValue, setEffectCurrentValue].forEach(item => item(value));
-
-const switchSlider = (evt) => {
-  let evtClassName = evt.target.className;
-  if (evtClassName.includes('effects__list') || evtClassName.includes('effects__item')) {return undefined}
-  if (evtClassName.includes('effects__label')) {evtClassName = emulateClassName(evt)}
-  if (evtClassName === null) {throw new Error('Error in emulateClassName function')}
-  if (evtClassName.match(/.+none$/)) {processNoneCase(); return undefined}
-  if (getSliderElement().noUiSlider !== undefined) {processStandartCase()}
-  if (evtClassName.match(/.+chrome$/)) {startChromeCase()}
-  if (evtClassName.match(/.+sepia$/)) {startSepiaCase()}
-  if (evtClassName.match(/.+marvin$/)) {startMarvinCase()}
-  if (evtClassName.match(/.+phobos$/)) {startPhobosCase()}
-  if (evtClassName.match(/.+heat$/)) {startHeatCase()}
-  getSliderElement().noUiSlider.on('update', (values, handle) => {
-    if (evtClassName.match(/.+chrome$/)) {runChromeChangingCase(values[handle])}
-    if (evtClassName.match(/.+sepia$/)) {runSepiaChangingCase(values[handle])}
-    if (evtClassName.match(/.+marvin$/)) {runMarvinChangingCase(values[handle])}
-    if (evtClassName.match(/.+phobos$/)) {runPhobosChangingCase(values[handle])}
-    if (evtClassName.match(/.+heat$/)) {runHeatChangingCase(values[handle])}
-  });
-  return undefined;
-};
+  switch (evt) {
+    let evtClassName = evt.target.className;
+    if (evtClassName.includes('effects__list') || evtClassName.includes('effects__item')) {return this}
+    if (evtClassName.includes('effects__label')) {evtClassName = Slider.emulateClassName(evt)}
+    if (evtClassName === null) {throw new Error('Error in Slider.emulateClassName method')}
+    if (evtClassName.match(/.+none$/)) {this.processNoneCase(); return this}
+    if (this.sliderElement.noUiSlider !== undefined) {this.processStandartCase()}
+    if (evtClassName.match(/.+chrome$/)) {this.startChromeCase()}
+    if (evtClassName.match(/.+sepia$/)) {this.startSepiaCase()}
+    if (evtClassName.match(/.+marvin$/)) {this.startMarvinCase()}
+    if (evtClassName.match(/.+phobos$/)) {this.startPhobosCase()}
+    if (evtClassName.match(/.+heat$/)) {this.startHeatCase()}
+    this.sliderElement.noUiSlider.on('update', (values, handle) => {
+      this.runEffectChangingCase(evt, values[handle]);
+    });
+    return this;
+  }
+}
 
 export {
-  switchSlider,
-  emulateClassName,
-  processNoneCase
+  Slider
 };

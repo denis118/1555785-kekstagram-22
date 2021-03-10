@@ -1,5 +1,5 @@
 import {
-  util
+  Utility
 } from './utility.js';
 
 const MAX_COMMENT_LENGTH = 140;
@@ -7,7 +7,7 @@ const MAX_COMMENT_LENGTH = 140;
 class Comment {
   constructor () {
     this.commentField = document.querySelector('textarea[name="description"]');
-    this.changeOutlineStyle = util.markField(this.commentField).bind(this);
+    this.changeOutlineStyle = Utility.markField(this.commentField).bind(this);
     this.onCommentFieldInput = this.onCommentFieldInput.bind(this);
     this.onCommentFieldFocus = this.onCommentFieldFocus.bind(this);
     this.onCommentFieldBlur = this.onCommentFieldBlur.bind(this);
@@ -31,13 +31,13 @@ class Comment {
 
   onCommentFieldFocus (evt) {
     evt.preventDefault();
-    this.commentField.addEventListener('keydown', util.onTextFieldKeydown);
+    this.commentField.addEventListener('keydown', Utility.onTextFieldKeydown);
     return undefined;
   }
 
   onCommentFieldBlur (evt) {
     evt.preventDefault();
-    this.commentField.removeEventListener('keydown', util.onTextFieldKeydown);
+    this.commentField.removeEventListener('keydown', Utility.onTextFieldKeydown);
     return undefined;
   }
 

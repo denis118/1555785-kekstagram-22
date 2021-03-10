@@ -1,11 +1,8 @@
-import {
-  switchSlider,
-  emulateClassName
-} from './slider.js';
-
 class Effects {
-  constructor (openedPicture) {
+  constructor (openedPicture, switchSlider, emulateClassName) {
     this.openedPicture = openedPicture;
+    this.switchSlider = switchSlider;
+    this.emulateClassName = emulateClassName;
     this.effectsList = document.querySelector('.effects__list');
     this.radios = document.querySelectorAll('input[type="radio"][name="effect"]');
     this.radiosArray = Array.from(this.radios);
@@ -23,7 +20,7 @@ class Effects {
     }
     let evtClassName = evt.target.className;
     if (evtClassName.includes('effects__label')) {
-      evtClassName = emulateClassName(evt);
+      evtClassName = this.emulateClassName(evt);
     }
     if (evtClassName.match(/.+none$/)) {
       radios.find((item) => item.id.match(/.+none$/)).checked = true;
@@ -54,7 +51,7 @@ class Effects {
   onEffectsListClick (evt) {
     evt.preventDefault();
     this.applyUserEffect(evt, this.openedPicture, this.radiosArray);
-    switchSlider(evt);
+    this.switchSlider(evt);
   }
 
   setEventListeners () {

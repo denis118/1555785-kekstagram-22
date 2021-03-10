@@ -1,19 +1,19 @@
 import {
-  util
+  Utility
 } from './utility.js';
 
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_HASHTAGS_AMOUNT = 5;
 
 const hashTagsField = document.querySelector('input[class="text__hashtags"]');
-const changeOutlineStyle = util.markField(hashTagsField);
+const changeOutlineStyle = Utility.markField(hashTagsField);
 
 const getTagsArray = string => string.trim().split(' ').map(item => item.toLowerCase());
 const searchFalse = (array, func) => array.map(item => func(item)).includes(false);
 const checkSingleHash = string => string.match(/^#$/) ? false : true;
 const checkAllowedChars = string => string.match(/^#[\p{Nd}\p{Alpha}]+$/u) ? true : false;
 const checkNonUniqueness = arr => [...new Set(arr)].length !== arr.length ? true : false;
-const checkTagLength = (string, length = MAX_HASHTAG_LENGTH) => util.validateStringLength(string, length);
+const checkTagLength = (string, length = MAX_HASHTAG_LENGTH) => Utility.validateStringLength(string, length);
 const checkTagsCountExceeding = (array, maxLength = MAX_HASHTAGS_AMOUNT) => array.length > maxLength ? true : false;
 
 const checkInvalidHashTags = () => {
@@ -85,13 +85,13 @@ const onHashTagsInput = () => {
 
 const onHashTagsFocus = (evt) => {
   evt.preventDefault();
-  hashTagsField.addEventListener('keydown', util.onTextFieldKeydown);
+  hashTagsField.addEventListener('keydown', Utility.onTextFieldKeydown);
   return undefined;
 };
 
 const onHashTagsBlur = (evt) => {
   evt.preventDefault();
-  hashTagsField.removeEventListener('keydown', util.onTextFieldKeydown);
+  hashTagsField.removeEventListener('keydown', Utility.onTextFieldKeydown);
   return undefined;
 };
 

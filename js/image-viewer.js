@@ -1,5 +1,5 @@
 import {
-  util
+  Utility
 } from './utility.js';
 
 const AVATAR_WIDTH = 35;
@@ -51,7 +51,7 @@ class ImageViewer {
   }
 
   searchMetaData (address) {
-    const imageSrc = util.extractPath(address).slice(1);
+    const imageSrc = Utility.extractPath(address).slice(1);
     const usedData = this.photoDescriptions.find((item) => item.url === imageSrc);
     this.metaData = Object.create(
       Object.getPrototypeOf(usedData),
@@ -150,7 +150,7 @@ class ImageViewer {
   }
 
   onPopupEscKeydown (evt) {
-    if (util.isEscEvent(evt)) {
+    if (Utility.isEscEvent(evt)) {
       this.onPictureClose(evt);
     }
     return undefined;
@@ -174,7 +174,7 @@ class ImageViewer {
   }
 
   onPictureEnterKeydown (evt) {
-    if (util.isEnterEvent(evt)) {
+    if (Utility.isEnterEvent(evt)) {
       evt.preventDefault();
       this.onPictureClick(evt);
     }
