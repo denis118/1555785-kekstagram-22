@@ -1,110 +1,154 @@
 import {
-  validateStringLength,
-  markField,
-  onTextFieldKeydown
+  Utility
 } from './utility.js';
 
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_HASHTAGS_AMOUNT = 5;
 
-const hashTagsField = document.querySelector('input[class="text__hashtags"]');
-const changeOutlineStyle = markField(hashTagsField);
+class Hashtags {
+  constructor () {
+    this.hashTagsField = document.querySelector('input[class="text__hashtags"]');
+    this.changeOutlineStyle = Utility.markField(this.hashTagsField).bind(this);
+    this.checkInvalidHashTags = this.checkInvalidHashTags.bind(this);
+    this.searchSingleHash = this.searchSingleHash.bind(this);
+    this.onHashTagsInput = this.onHashTagsInput.bind(this);
+    this.onHashTagsFocus = this.onHashTagsFocus.bind(this);
+    this.onHashTagsBlur = this.onHashTagsBlur.bind(this);
+    this.clean = this.clean.bind(this);
+    this.setEventListeners = this.setEventListeners.bind(this);
+    this.eraseEventListeners = this.eraseEventListeners.bind(this);
+  }
 
-const getTagsArray = string => string.trim().split(' ').map(item => item.toLowerCase());
-const searchFalse = (array, func) => array.map(item => func(item)).includes(false);
-const checkSingleHash = string => string.match(/^#$/) ? false : true;
-const checkAllowedChars = string => string.match(/^#[\p{Nd}\p{Alpha}]+$/u) ? true : false;
-const checkNonUniqueness = arr => [...new Set(arr)].length !== arr.length ? true : false;
-const checkTagLength = (string, length = MAX_HASHTAG_LENGTH) => validateStringLength(string, length);
-const checkTagsCountExceeding = (array, maxLength = MAX_HASHTAGS_AMOUNT) => array.length > maxLength ? true : false;
+  static getTagsArray (string) {
+    return string.trim().split(' ').map(item => item.toLowerCase());
+  }
 
-const checkInvalidHashTags = () => {
-  const tagsArray = getTagsArray(hashTagsField.value);
-  let stopSubmit = false;
-  if (searchFalse(tagsArray, checkSingleHash) || !hashTagsField.value) {
-    hashTagsField.setCustomValidity('');
-    if (hashTagsField.style.outline.match(/^red solid 1px$/)) {
-      changeOutlineStyle('');
+  static searchFalse (array, func) {
+    return array.map(item => func(item)).includes(false);
+  }
+
+  static checkSingleHash (string) {
+    return string.match(/^#$/) ? false : true;
+  }
+
+  static checkAllowedChars (string) {
+    return string.match(/^#[\p{Nd}\p{Alpha}]+$/u) ? true : false;
+  }
+
+  static checkNonUniqueness (arr) {
+    return [...new Set(arr)].length !== arr.length ? true : false;
+  }
+
+  static checkTagLength (string, length = MAX_HASHTAG_LENGTH) {
+    return Utility.validateStringLength(string, length);
+  }
+
+  static checkTagsCountExceeding (array, maxLength = MAX_HASHTAGS_AMOUNT) {
+    return array.length > maxLength ? true : false;
+  }
+
+  checkInvalidHashTags () {
+    let stopSubmit = false;
+    const tagsArray = Hashtags.getTagsArray(this.hashTagsField.value);
+    if (Hashtags.searchFalse(tagsArray, Hashtags.checkSingleHash) || !this.hashTagsField.value) {
+      this.hashTagsField.setCustomValidity('');
+      if (this.hashTagsField.style.outline.match(/^red solid 1px$/)) {
+        this.changeOutlineStyle('');
+      }
+      return stopSubmit;
+    }
+    const invalidities = [];
+    const hashTagPipes = [
+      {
+        method: Hashtags.searchFalse(tagsArray, Hashtags.checkAllowedChars),
+        message: 'Хэштег начинается с #, а строка после # должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д',
+      },
+      {
+        method: Hashtags.checkNonUniqueness(tagsArray),
+        message: 'Хэш-теги должны быть уникальны при условии нечувствительности к регистру',
+      },
+      {
+        method: Hashtags.searchFalse(tagsArray, Hashtags.checkTagLength),
+        message: 'Максимальная длина одного хэш-тега 20 символов, включая решётку',
+      },
+      {
+        method: Hashtags.checkTagsCountExceeding(tagsArray),
+        message: 'Нельзя указать больше пяти хэш-тегов',
+      },
+    ];
+    for (let i = 0; i < hashTagPipes.length; i++) {
+      if (hashTagPipes[i].method) {
+        invalidities.push(hashTagPipes[i].message);
+      }
+    }
+    if (invalidities.length) {
+      this.hashTagsField.setCustomValidity(invalidities.join('. \n'));
+      this.hashTagsField.reportValidity();
+      this.changeOutlineStyle('1px solid red');
+      stopSubmit = true;
+    } else {
+      this.hashTagsField.setCustomValidity('');
+      this.changeOutlineStyle('');
     }
     return stopSubmit;
   }
-  const invalidities = [];
-  const hashTagPipes = [
-    {
-      method: searchFalse(tagsArray, checkAllowedChars),
-      message: 'Хэштег начинается с #, а строка после # должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д',
-    },
-    {
-      method: checkNonUniqueness(tagsArray),
-      message: 'Хэш-теги должны быть уникальны при условии нечувствительности к регистру',
-    },
-    {
-      method: searchFalse(tagsArray, checkTagLength),
-      message: 'Максимальная длина одного хэш-тега 20 символов, включая решётку',
-    },
-    {
-      method: checkTagsCountExceeding(tagsArray),
-      message: 'Нельзя указать больше пяти хэш-тегов',
-    },
-  ];
-  for (let i = 0; i < hashTagPipes.length; i++) {
-    if (hashTagPipes[i].method) {
-      invalidities.push(hashTagPipes[i].message);
+
+  searchSingleHash () {
+    let stopSubmit = true;
+    const tagsArray = Hashtags.getTagsArray(this.hashTagsField.value);
+    if (Hashtags.searchFalse(tagsArray, Hashtags.checkSingleHash)) {
+      this.hashTagsField.setCustomValidity('Хэш-тег не может состоять толко из #');
+      this.hashTagsField.reportValidity();
+      this.changeOutlineStyle('1px solid red');
+      return stopSubmit;
+    } else {
+      this.hashTagsField.value = this.hashTagsField.value.trim();
+      this.hashTagsField.setCustomValidity('');
+      this.changeOutlineStyle('');
+      stopSubmit = false;
+      return stopSubmit;
     }
   }
-  if (invalidities.length) {
-    hashTagsField.setCustomValidity(invalidities.join('. \n'));
-    hashTagsField.reportValidity();
-    changeOutlineStyle('1px solid red');
-    stopSubmit = true;
-  } else {
-    hashTagsField.setCustomValidity('');
-    changeOutlineStyle('');
+
+  onHashTagsInput () {
+    this.checkInvalidHashTags();
+    return undefined;
   }
-  return stopSubmit;
-};
 
-const searchSingleHash = () => {
-  let stopSubmit = true;
-  if (searchFalse(getTagsArray(hashTagsField.value), checkSingleHash)) {
-    hashTagsField.setCustomValidity('Хэш-тег не может состоять толко из #');
-    hashTagsField.reportValidity();
-    changeOutlineStyle('1px solid red');
-    return stopSubmit;
-  } else {
-    hashTagsField.value = hashTagsField.value.trim();
-    hashTagsField.setCustomValidity('');
-    changeOutlineStyle('');
-    stopSubmit = false;
-    return stopSubmit;
+  onHashTagsFocus (evt) {
+    evt.preventDefault();
+    this.hashTagsField.addEventListener('keydown', Utility.onTextFieldKeydown);
+    return undefined;
   }
-};
 
-const onHashTagsInput = () => {
-  checkInvalidHashTags();
-  return undefined;
-};
+  onHashTagsBlur (evt) {
+    evt.preventDefault();
+    this.hashTagsField.removeEventListener('keydown', Utility.onTextFieldKeydown);
+    return undefined;
+  }
 
-const onHashTagsFocus = (evt) => {
-  evt.preventDefault();
-  hashTagsField.addEventListener('keydown', onTextFieldKeydown);
-  return undefined;
-};
+  clean () {
+    this.hashTagsField.value = '';
+    return undefined;
+  }
 
-const onHashTagsBlur = (evt) => {
-  evt.preventDefault();
-  hashTagsField.removeEventListener('keydown', onTextFieldKeydown);
-  return undefined;
-};
+  setEventListeners () {
+    this.hashTagsField.addEventListener('input', this.onHashTagsInput);
+    this.hashTagsField.addEventListener('focus', this.onHashTagsFocus);
+    this.hashTagsField.addEventListener('blur', this.onHashTagsBlur);
+    return undefined;
+  }
 
-const clearHashTagsField = () => hashTagsField.value = '';
+  eraseEventListeners () {
+    this.hashTagsField.removeEventListener('input', this.onHashTagsInput);
+    this.hashTagsField.removeEventListener('focus', this.onHashTagsFocus);
+    this.hashTagsField.removeEventListener('blur', this.onHashTagsBlur);
+    return undefined;
+  }
+}
+
+const hashtags = new Hashtags();
 
 export {
-  hashTagsField,
-  checkInvalidHashTags,
-  onHashTagsInput,
-  searchSingleHash,
-  onHashTagsFocus,
-  onHashTagsBlur,
-  clearHashTagsField
+  hashtags
 };

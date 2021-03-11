@@ -1,117 +1,117 @@
 import {
-  isEscEvent
+  Utility
 } from './utility.js';
 
 import {
-  scaleControlSmaller,
-  scaleControlBigger,
-  setUserScale,
-  onScaleControlSmallerClick,
-  onScaleControlBiggerClick
+  data
+} from './data.js';
+
+import {
+  Scale
 } from './scale.js';
 
 import {
-  effectsList,
-  onEffectsListClick,
-  radiosArray
+  Effects
 } from './effects.js';
 
 import {
-  processNoneCase as resetEffects
+  Slider
 } from './slider.js';
 
 import {
-  hashTagsField,
-  checkInvalidHashTags,
-  onHashTagsInput,
-  searchSingleHash,
-  onHashTagsFocus,
-  onHashTagsBlur,
-  clearHashTagsField
+  hashtags
 } from './hashtags.js';
 
 import {
-  commentsField,
-  onCommentsFieldInput,
-  onCommentsFocus,
-  onCommentsBlur,
-  clearCommentsField
-} from './comments.js';
+  comment
+} from './comment.js';
 
-import {
-  imgUploadForm,
-  onImgUploadFormSubmit
-} from './form-submission.js';
-
-const body = document.body;
-const uploadFile = document.querySelector('#upload-file');
-const imgUploadOverlay = document.querySelector('.img-upload__overlay');
-const uploadCancel = document.querySelector('#upload-cancel');
-const uploadSubmit = document.querySelector('button[id="upload-submit"]');
-
-const resetFormData = () => {
-  radiosArray.find((item) => item.id.match(/.+none$/)).checked = true;
-  [resetEffects, clearHashTagsField, clearCommentsField].forEach(item => item());
-  return undefined;
-};
-
-const onUploadSubmitClick = (evt) => {
-  if (searchSingleHash() || checkInvalidHashTags()) {evt.preventDefault()}
-  return undefined;
-};
-
-const onUploadFileChange = (evt) => {
-  evt.preventDefault();
-  body.classList.add('modal-open');
-  imgUploadOverlay.classList.remove('hidden');
-  setUserScale();
-  scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
-  scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
-  effectsList.addEventListener('click', onEffectsListClick);
-  uploadCancel.addEventListener('click', onUploadCancelClick);
-  imgUploadForm.addEventListener('submit', onImgUploadFormSubmit);
-  hashTagsField.addEventListener('input', onHashTagsInput);
-  hashTagsField.addEventListener('focus', onHashTagsFocus);
-  hashTagsField.addEventListener('blur', onHashTagsBlur);
-  commentsField.addEventListener('input', onCommentsFieldInput);
-  commentsField.addEventListener('focus', onCommentsFocus);
-  commentsField.addEventListener('blur', onCommentsBlur);
-  uploadSubmit.addEventListener('click', onUploadSubmitClick);
-  document.addEventListener('keydown', onUploadFileEscKeydown);
-  return undefined;
-};
-
-const onUploadCancelClick = (evt) => {
-  evt.preventDefault();
-  uploadFile.value = '';
-  body.classList.remove('modal-open');
-  imgUploadOverlay.classList.add('hidden');
-  resetFormData();
-  scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
-  scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
-  effectsList.removeEventListener('click', onEffectsListClick);
-  uploadCancel.removeEventListener('click', onUploadCancelClick);
-  imgUploadForm.removeEventListener('submit', onImgUploadFormSubmit);
-  hashTagsField.removeEventListener('click', onHashTagsInput);
-  hashTagsField.removeEventListener('focus', onHashTagsFocus);
-  hashTagsField.removeEventListener('blur', onHashTagsBlur);
-  commentsField.removeEventListener('input', onCommentsFieldInput);
-  commentsField.removeEventListener('focus', onCommentsFocus);
-  commentsField.removeEventListener('blur', onCommentsBlur);
-  uploadSubmit.removeEventListener('click', onUploadSubmitClick);
-  document.removeEventListener('keydown', onUploadFileEscKeydown);
-  return undefined;
-};
-
-const onUploadFileEscKeydown = (evt) => {
-  if (isEscEvent(evt)) {
-    onUploadCancelClick(evt);
+class ImageEditor {
+  constructor () {
+    this.body = document.body;
+    this.uploadFile = document.querySelector('#upload-file');
+    this.imgUploadOverlay = document.querySelector('.img-upload__overlay');
+    this.imgUploadPreview = document.querySelector('.img-upload__preview');
+    this.openedPicture = this.imgUploadPreview.querySelector('img[alt="Предварительный просмотр фотографии"]');
+    this.uploadCancel = document.querySelector('#upload-cancel');
+    this.uploadSubmit = document.querySelector('button[id="upload-submit"]');
+    this.scale = new Scale(this.openedPicture);
+    this.slider = new Slider(this.openedPicture).buildEffectsOptions();
+    this.effects = new Effects(this.openedPicture, this.slider.switch, Slider.emulateClassName);
+    this.resetFormData = this.resetFormData.bind(this);
+    this.onUploadSubmitClick = this.onUploadSubmitClick.bind(this);
+    this.onUploadFileChange = this.onUploadFileChange.bind(this);
+    this.onUploadCancelClick = this.onUploadCancelClick.bind(this);
+    this.onUploadFileEscKeydown = this.onUploadFileEscKeydown.bind(this);
+    this.setEventListeners = this.setEventListeners.bind(this);
+    this.close = this.close.bind(this);
   }
-  return undefined;
-};
 
-uploadFile.addEventListener('change', onUploadFileChange);
+  resetFormData () {
+    this.effects.radiosArray.find((item) => item.id.match(/.+none$/)).checked = true;
+    [this.slider.processNoneCase, hashtags.clean, comment.clean].forEach(item => item());
+    return undefined;
+  }
+
+  onUploadSubmitClick (evt) {
+    if (hashtags.searchSingleHash() || hashtags.checkInvalidHashTags()) {evt.preventDefault()}
+    return undefined;
+  }
+
+  onUploadFileChange (evt) {
+    evt.preventDefault();
+    this.body.classList.add('modal-open');
+    this.imgUploadOverlay.classList.remove('hidden');
+    this.scale.setUserScale();
+    this.scale.setEventListeners();
+    this.effects.setEventListeners();
+    data.setEventListeners();
+    comment.setEventListeners();
+    hashtags.setEventListeners();
+    this.uploadCancel.addEventListener('click', this.onUploadCancelClick);
+    this.uploadSubmit.addEventListener('click', this.onUploadSubmitClick);
+    document.addEventListener('keydown', this.onUploadFileEscKeydown);
+    return undefined;
+  }
+
+  onUploadCancelClick (evt) {
+    evt.preventDefault();
+    this.uploadFile.value = '';
+    this.body.classList.remove('modal-open');
+    this.imgUploadOverlay.classList.add('hidden');
+    this.resetFormData();
+    this.scale.eraseEventListeners();
+    this.effects.eraseEventListeners();
+    data.eraseEventListeners();
+    comment.eraseEventListeners();
+    hashtags.eraseEventListeners();
+    this.uploadCancel.removeEventListener('click', this.onUploadCancelClick);
+    this.uploadSubmit.removeEventListener('click', this.onUploadSubmitClick);
+    document.removeEventListener('keydown', this.onUploadFileEscKeydown);
+    return undefined;
+  }
+
+  onUploadFileEscKeydown (evt) {
+    if (Utility.isEscEvent(evt)) {
+      this.onUploadCancelClick(evt);
+    }
+    return undefined;
+  }
+
+  setEventListeners () {
+    this.uploadFile.addEventListener('change', this.onUploadFileChange);
+    return undefined;
+  }
+
+  close (evt) {
+    this.onUploadCancelClick(evt)
+  }
+}
+
+const imageEditor = new ImageEditor();
+imageEditor.setEventListeners();
+
 
 export {
-  onUploadCancelClick
+  imageEditor
 };

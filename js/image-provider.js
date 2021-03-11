@@ -1,5 +1,5 @@
 import {
-  debounce
+  Utility
 } from './utility.js';
 
 import {
@@ -18,7 +18,7 @@ class ImageProvider {
     this.onPicturesBlockFocus = this.onPicturesBlockFocus.bind(this);
     this.onPicturesBlockBlur = this.onPicturesBlockBlur.bind(this);
     this.setEventListeners = this.setEventListeners.bind(this);
-    this.render = debounce(this.render, RENDERING_DELAY);
+    this.render = Utility.debounce(this.render, RENDERING_DELAY);
     this.clean = this.clean.bind(this);
   }
 

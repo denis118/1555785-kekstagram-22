@@ -1,7 +1,5 @@
 import {
-  getData
+  data
 } from './data.js';
 
-import './image-editor.js';
-
-getData();
+data.receive();
