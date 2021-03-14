@@ -1,3 +1,5 @@
+'use strict';
+
 class Utility {
   static getNumber (lowerLimit, upperLimit) {
     if (lowerLimit < 0 || upperLimit < 0) {

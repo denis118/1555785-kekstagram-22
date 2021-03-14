@@ -1,4 +1,5 @@
 /* global noUiSlider:readonly */
+'use strict';
 
 const CHROME_MIN = 0;
 const CHROME_MAX = 1;

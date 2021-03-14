@@ -1,3 +1,5 @@
+'use strict';
+
 const STEP = 0.25;
 const MIN_SCALE_COEFFICIENT = 0.25;
 const MAX_SCALE_COEFFICIENT = 1;

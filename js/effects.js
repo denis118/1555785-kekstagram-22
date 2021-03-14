@@ -1,3 +1,5 @@
+'use strict';
+
 class Effects {
   constructor (openedPicture, switchSlider, emulateClassName) {
     this.openedPicture = openedPicture;
