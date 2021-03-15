@@ -20,13 +20,14 @@ class ImageProvider {
     this.onPicturesBlockFocus = this.onPicturesBlockFocus.bind(this);
     this.onPicturesBlockBlur = this.onPicturesBlockBlur.bind(this);
     this.setEventListeners = this.setEventListeners.bind(this);
+    this.matchElements = this.matchElements.bind(this);
     this.render = Utility.debounce(this.render, RENDERING_DELAY);
     this.clean = this.clean.bind(this);
   }
 
   collectPictures (data) {
     this.fragment = document.createDocumentFragment();
-    for (let i = 0; i < data.length; i++) {
+    data.forEach((_, i) => {
       const newPicture = this.picture.cloneNode(true);
       const pictureImg = newPicture.querySelector('.picture__img');
       const pictureComments = newPicture.querySelector('.picture__comments');
@@ -35,8 +36,12 @@ class ImageProvider {
       pictureComments.textContent = data[i].comments.length;
       pictureLikes.textContent = data[i].likes;
       this.fragment.appendChild(newPicture);
-    }
+    });
     return this;
+  }
+
+  matchElements (evt, elementSelector) {
+    return evt.target.matches(elementSelector);
   }
 
   clean () {
@@ -57,28 +62,28 @@ class ImageProvider {
   }
 
   onPicturesBlockMouseOver (evt) {
-    if (evt.target.matches('img[class="picture__img"]')) {
+    if (this.matchElements(evt, 'img[class="picture__img"]')) {
       evt.target.addEventListener('click', imageViewer.onPictureClick);
     }
     return undefined;
   }
 
   onPicturesBlockMouseOut (evt) {
-    if (evt.target.matches('img[class="picture__img"]')) {
+    if (this.matchElements(evt, 'img[class="picture__img"]')) {
       evt.target.removeEventListener('click', imageViewer.onPictureClick);
     }
     return undefined;
   }
 
   onPicturesBlockFocus (evt) {
-    if (evt.target.matches('a[class="picture"]')) {
+    if (this.matchElements(evt, 'a[class="picture"]')) {
       evt.target.addEventListener('keydown', imageViewer.onPictureEnterKeydown);
     }
     return undefined;
   }
 
   onPicturesBlockBlur (evt) {
-    if (evt.target.matches('a[class="picture"]')) {
+    if (this.matchElements(evt, 'a[class="picture"]')) {
       evt.target.removeEventListener('keydown', imageViewer.onPictureEnterKeydown);
     }
     return undefined;

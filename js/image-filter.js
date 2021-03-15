@@ -49,10 +49,10 @@ class ImageFilter {
       Utility.showMessage()(new Error('Inspect "RegEx" object and ImageFilter.filters'));
     }
     const regEntries = Object.entries(RegEx);
-    for (let i = 0; i < regEntries.length; i++) {
+    regEntries.forEach((_, i) => {
       const key = regEntries[i][0].toLowerCase() + 'Filter';
       this[key] = this.filters.find(item => item.id.match(regEntries[i][1]));
-    }
+    });
     return this;
   }
 
@@ -81,14 +81,14 @@ class ImageFilter {
   sortByRandom () {
     this.getUniqueIndexes();
     this.randomImages = [];
-    for (let i = 0; i < this.indexes.length; i++) {
+    this.indexes.forEach((_, i) => {
       this.randomImages.push(
         Object.create(
           Object.getPrototypeOf(this.stock[this.indexes[i]]),
           Object.getOwnPropertyDescriptors(this.stock[this.indexes[i]]),
         ),
       );
-    }
+    });
     return this;
   }
 

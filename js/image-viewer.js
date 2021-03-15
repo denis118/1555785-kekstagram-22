@@ -72,26 +72,26 @@ class ImageViewer {
 
   createCommentsFragment () {
     const commentsFragment = document.createDocumentFragment();
-    for (let i = 0; i < this.metaData.comments.length; i++) {
+    this.metaData.comments.forEach(item => {
       const listItem = document.createElement('li');
       const image = document.createElement('img');
       const paragraph = document.createElement('p');
 
       image.classList.add('social__picture');
-      image.src = this.metaData.comments[i].avatar;
-      image.alt = this.metaData.comments[i].name;
+      image.src = item.avatar;
+      image.alt = item.name;
       image.width = AVATAR_WIDTH;
       image.height = AVATAR_HEIGHT;
 
       paragraph.classList.add('social__text');
-      paragraph.textContent = this.metaData.comments[i].message;
+      paragraph.textContent = item.message;
 
       listItem.classList.add('social__comment');
       listItem.appendChild(image);
       listItem.appendChild(paragraph);
 
       commentsFragment.appendChild(listItem);
-    }
+    });
 
     this.commentsFragment = commentsFragment;
     return this;
@@ -133,9 +133,7 @@ class ImageViewer {
       elementsToDisplay = this.hiddenCommentsQueue
         .splice(startIndex, DISPLAYED_COMMENTS_AMOUNT);
     }
-    for (let i = elementsToDisplay.length - 1; i >= 0; i--) {
-      elementsToDisplay[i].classList.remove('hidden');
-    }
+    elementsToDisplay.forEach(item => item.classList.remove('hidden'));
     if (!this.hiddenCommentsQueue.length) {
       this.socialCommentsLoader.classList.add('hidden');
     }

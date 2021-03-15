@@ -38,7 +38,7 @@ class Hashtags {
   }
 
   static checkNonUniqueness (arr) {
-    return [...new Set(arr)].length !== arr.length ? true : false;
+    return [...new Set(arr)].length !== arr.length;
   }
 
   static checkTagLength (string, length = MAX_HASHTAG_LENGTH) {
@@ -46,7 +46,7 @@ class Hashtags {
   }
 
   static checkTagsCountExceeding (array, maxLength = MAX_HASHTAGS_AMOUNT) {
-    return array.length > maxLength ? true : false;
+    return array.length > maxLength;
   }
 
   checkInvalidHashTags () {
@@ -78,11 +78,11 @@ class Hashtags {
         message: 'Нельзя указать больше пяти хэш-тегов',
       },
     ];
-    for (let i = 0; i < hashTagPipes.length; i++) {
+    hashTagPipes.forEach((_, i) => {
       if (hashTagPipes[i].method) {
         invalidities.push(hashTagPipes[i].message);
       }
-    }
+    });
     if (invalidities.length) {
       this.hashTagsField.setCustomValidity(invalidities.join('. \n'));
       this.hashTagsField.reportValidity();
