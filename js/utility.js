@@ -140,6 +140,10 @@ class Utility {
       return undefined;
     }
   }
+
+  static matchElement (evt, elementSelector) {
+    return evt.target.matches(elementSelector);
+  }
 }
 
 export {

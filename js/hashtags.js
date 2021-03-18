@@ -11,7 +11,7 @@ class Hashtags {
   constructor () {
     this.hashTagsField = document.querySelector('input[class="text__hashtags"]');
     this.changeOutlineStyle = Utility.markField(this.hashTagsField).bind(this);
-    this.checkInvalidHashTags = this.checkInvalidHashTags.bind(this);
+    this.checkIncorrectHashTags = this.checkIncorrectHashTags.bind(this);
     this.searchSingleHash = this.searchSingleHash.bind(this);
     this.onHashTagsInput = this.onHashTagsInput.bind(this);
     this.onHashTagsFocus = this.onHashTagsFocus.bind(this);
@@ -49,7 +49,7 @@ class Hashtags {
     return array.length > maxLength;
   }
 
-  checkInvalidHashTags () {
+  checkIncorrectHashTags () {
     let stopSubmit = false;
     const tagsArray = Hashtags.getTagsArray(this.hashTagsField.value);
     if (Hashtags.searchFalse(tagsArray, Hashtags.checkSingleHash) || !this.hashTagsField.value) {
@@ -59,7 +59,7 @@ class Hashtags {
       }
       return stopSubmit;
     }
-    const invalidities = [];
+    const incorrectHashTags = [];
     const hashTagPipes = [
       {
         method: Hashtags.searchFalse(tagsArray, Hashtags.checkAllowedChars),
@@ -80,11 +80,11 @@ class Hashtags {
     ];
     hashTagPipes.forEach((_, i) => {
       if (hashTagPipes[i].method) {
-        invalidities.push(hashTagPipes[i].message);
+        incorrectHashTags.push(hashTagPipes[i].message);
       }
     });
-    if (invalidities.length) {
-      this.hashTagsField.setCustomValidity(invalidities.join('. \n'));
+    if (incorrectHashTags.length) {
+      this.hashTagsField.setCustomValidity(incorrectHashTags.join('. \n'));
       this.hashTagsField.reportValidity();
       this.changeOutlineStyle('1px solid red');
       stopSubmit = true;
@@ -113,7 +113,7 @@ class Hashtags {
   }
 
   onHashTagsInput () {
-    this.checkInvalidHashTags();
+    this.checkIncorrectHashTags();
     return undefined;
   }
 

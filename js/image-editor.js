@@ -56,7 +56,7 @@ class ImageEditor {
   }
 
   onUploadSubmitClick (evt) {
-    if (hashtags.searchSingleHash() || hashtags.checkInvalidHashTags()) {evt.preventDefault()}
+    if (hashtags.searchSingleHash() || hashtags.checkIncorrectHashTags()) {evt.preventDefault()}
     return undefined;
   }
 

@@ -20,7 +20,6 @@ class ImageProvider {
     this.onPicturesBlockFocus = this.onPicturesBlockFocus.bind(this);
     this.onPicturesBlockBlur = this.onPicturesBlockBlur.bind(this);
     this.setEventListeners = this.setEventListeners.bind(this);
-    this.matchElements = this.matchElements.bind(this);
     this.render = Utility.debounce(this.render, RENDERING_DELAY);
     this.clean = this.clean.bind(this);
   }
@@ -40,16 +39,10 @@ class ImageProvider {
     return this;
   }
 
-  matchElements (evt, elementSelector) {
-    return evt.target.matches(elementSelector);
-  }
-
   clean () {
     const pictures = this.picturesBlock.querySelectorAll('.picture');
-    if (pictures) {
-      for (let i = 0; i < pictures.length; i++) {
-        this.picturesBlock.removeChild(pictures[i]);
-      }
+    if (pictures.length) {
+      pictures.forEach(item => this.picturesBlock.removeChild(item));
     }
     return this;
   }
@@ -62,28 +55,28 @@ class ImageProvider {
   }
 
   onPicturesBlockMouseOver (evt) {
-    if (this.matchElements(evt, 'img[class="picture__img"]')) {
+    if (Utility.matchElement(evt, 'img[class="picture__img"]')) {
       evt.target.addEventListener('click', imageViewer.onPictureClick);
     }
     return undefined;
   }
 
   onPicturesBlockMouseOut (evt) {
-    if (this.matchElements(evt, 'img[class="picture__img"]')) {
+    if (Utility.matchElement(evt, 'img[class="picture__img"]')) {
       evt.target.removeEventListener('click', imageViewer.onPictureClick);
     }
     return undefined;
   }
 
   onPicturesBlockFocus (evt) {
-    if (this.matchElements(evt, 'a[class="picture"]')) {
+    if (Utility.matchElement(evt, 'a[class="picture"]')) {
       evt.target.addEventListener('keydown', imageViewer.onPictureEnterKeydown);
     }
     return undefined;
   }
 
   onPicturesBlockBlur (evt) {
-    if (this.matchElements(evt, 'a[class="picture"]')) {
+    if (Utility.matchElement(evt, 'a[class="picture"]')) {
       evt.target.removeEventListener('keydown', imageViewer.onPictureEnterKeydown);
     }
     return undefined;
