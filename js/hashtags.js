@@ -30,11 +30,11 @@ class Hashtags {
   }
 
   static checkSingleHash (string) {
-    return string.match(/^#$/) ? false : true;
+    return !/^#$/.test(string);
   }
 
   static checkAllowedChars (string) {
-    return string.match(/^#[\p{Nd}\p{Alpha}]+$/u) ? true : false;
+    return /^#[\p{Nd}\p{Alpha}]+$/u.test(string);
   }
 
   static checkNonUniqueness (arr) {

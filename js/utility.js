@@ -142,7 +142,7 @@ class Utility {
   }
 
   static matchElement (evt, elementSelector) {
-    return evt.target.matches(elementSelector);
+    return Boolean(evt.target.matches(elementSelector));
   }
 }
 
