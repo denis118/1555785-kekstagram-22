@@ -28,6 +28,10 @@ import {
   comment
 } from './comment.js';
 
+import {
+  ImageReader
+} from './image-reader.js';
+
 class ImageEditor {
   constructor () {
     this.body = document.body;
@@ -40,6 +44,7 @@ class ImageEditor {
     this.scale = new Scale(this.openedPicture);
     this.slider = new Slider(this.openedPicture).buildEffectsOptions();
     this.effects = new Effects(this.openedPicture, this.slider.switch, Slider.emulateClassName);
+    this.imageReader = new ImageReader(this);
     this.resetFormData = this.resetFormData.bind(this);
     this.onUploadSubmitClick = this.onUploadSubmitClick.bind(this);
     this.onUploadFileChange = this.onUploadFileChange.bind(this);
@@ -67,6 +72,7 @@ class ImageEditor {
     this.scale.setUserScale();
     this.scale.setEventListeners();
     this.effects.setEventListeners();
+    this.imageReader.exect();
     data.setEventListeners();
     comment.setEventListeners();
     hashtags.setEventListeners();
@@ -84,6 +90,7 @@ class ImageEditor {
     this.resetFormData();
     this.scale.eraseEventListeners();
     this.effects.eraseEventListeners();
+    this.imageReader.eraseEventListeners();
     data.eraseEventListeners();
     comment.eraseEventListeners();
     hashtags.eraseEventListeners();
@@ -112,7 +119,6 @@ class ImageEditor {
 
 const imageEditor = new ImageEditor();
 imageEditor.setEventListeners();
-
 
 export {
   imageEditor
