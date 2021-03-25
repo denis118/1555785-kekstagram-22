@@ -1,5 +1,7 @@
-/* global noUiSlider:readonly */
 'use strict';
+
+import noUiSlider from 'nouislider';
+import 'nouislider/distribute/nouislider.css';
 
 const CHROME_MIN = 0;
 const CHROME_MAX = 1;
